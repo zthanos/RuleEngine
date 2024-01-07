@@ -1,6 +1,6 @@
 ﻿namespace RuleEngineTester.RuleEngine;
 
-public class Customer
+public class Customer : IRuleApplicable
 {
     public string Name { get; set; }
     public string Description { get; set; }

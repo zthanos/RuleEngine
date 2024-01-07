@@ -17,6 +17,9 @@
     <None Update="customer_rules.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="customer_rules.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="plain_rules.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
