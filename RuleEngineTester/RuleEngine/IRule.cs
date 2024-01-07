@@ -1,7 +1,8 @@
 ﻿
 namespace RuleEngineTester.RuleEngine;
-public interface IRule<T>
+public interface IRule
 {
-    IReadOnlyCollection<Action<T>> Actions { get; }
-    IReadOnlyCollection<Func<T, bool>> Conditions { get; }
+    void ApplyRules(object target);
+    //IList<Action<T>> Actions { get; }
+    //IList<Func<T, bool>> Conditions { get; }
 }

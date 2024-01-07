@@ -1,0 +1,48 @@
+{
+  "rules": [
+    {
+      "name": "RuleForKYC",
+      "appliesTo": "RuleEngineTester.RuleEngine.Customer",
+      "order": 1,
+      "conditions": [
+        {
+          "property": "HomeAddress",
+          "type": "NotNull",
+          "operator": "And"
+        },
+        {
+          "property": "HomeAddress",
+          "type": "NotEmpty",
+          "operator": "And"
+        },
+        {
+          "property": "Email",
+          "type": "NotNull",
+          "operator": "And"
+        },
+        {
+          "property": "Email",
+          "type": "NotEmpty",
+          "operator": "And"
+        },
+        {
+          "property": "Phone",
+          "type": "NotNull",
+          "operator": "And"
+        },
+        {
+          "property": "Phone",
+          "type": "NotEmpty",
+          "operator": "And"
+        }
+      ],
+      "actions": [
+        {
+          "type": "SetProperty",
+          "property": "IsKYCReady",
+          "value": true
+        }
+      ]
+    }
+  ]
+}
