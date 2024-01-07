@@ -1,12 +1,10 @@
-﻿using RuleEngineTester.RuleEngine.Evaluators;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 namespace RuleEngineTester.RuleEngine;
 
 public class LsRule<T> : IRule
 {
     public IList<Func<T, bool>> ConditionFunctions { get; internal set; }
-    public IList<Action> Actions { get; internal set; }
-
+    public IList<Action<T>> Actions { get; internal set; }
 
     public void AddCondition(Condition condition) => ConditionFunctions.Add(CreateConditionFunc(condition));
     public void AddConditions(IList<Condition> conditions)
@@ -17,38 +15,43 @@ public class LsRule<T> : IRule
         }
     }
 
-    public void AddAction(Action action) => Actions.Add(action);
-    public void AddActions(IList<Action> actions)
-    {
-        foreach (var action in actions)
-        {
-            AddAction(action);
-        }
-    }
-
     public LsRule()
     {
         ConditionFunctions = new ObservableCollection<Func<T, bool>>();
-        Actions = new ObservableCollection<Action>();
+        Actions = new ObservableCollection<Action<T>>();
     }
+    public LsRule(IEnumerable<Func<T, bool>> conditions, IEnumerable<Action<T>> actions)
+    {
+        ConditionFunctions = new ReadOnlyCollection<Func<T, bool>>(conditions.ToList());
+        Actions = new ReadOnlyCollection<Action<T>>(actions.ToList());
+
+    }
+
 
     private Func<T, bool> CreateConditionFunc(Condition condition)
     {
-        var evaluatorFactory = new ConditionEvaluatorFactory<T>();
-        var conditionEvaluator = evaluatorFactory.CreateConditionEvaluator(condition);
-
-        return typedTarget => conditionEvaluator.Evaluate(typedTarget);
-    }
-
-    private void SetPropertyValue(T typedTarget, string propertyName, object value)
-    {
-        var property = typedTarget!.GetType().GetProperty(propertyName);
-        if (property != null && property.PropertyType == typeof(bool))
+        switch (condition.ConditionType)
         {
-            property.SetValue(typedTarget, value);
+            case ConditionType.Null:
+                return typedTarget => GetPropertyValue(typedTarget, condition.Name) == null;
+            case ConditionType.NotNull:
+                return typedTarget => GetPropertyValue(typedTarget, condition.Name) != null;
+            case ConditionType.NotEmpty:
+                return typedTarget => (string)GetPropertyValue(typedTarget, condition.Name)! != string.Empty;
+            //case ConditionType.GreaterThan:
+            //    // Assuming the property and condition value are of numeric types
+            //    var propertyValue = (IComparable)GetPropertyValue(typedTarget, condition.Name)!;
+            //    var conditionValue = (IComparable)condition.Value;
+            //    return typedTarget => propertyValue.CompareTo(conditionValue) > 0;
+
+            case ConditionType.None:
+                return customer => true;
+            // Add more cases for other condition types
+            default:
+                throw new NotSupportedException($"Condition type '{condition.ConditionType}' is not supported.");
         }
-        // Optionally, you might want to handle other property types or log a warning for unexpected types.
     }
+
 
     private object? GetPropertyValue(T customer, string propertyName)
     {
@@ -111,7 +114,7 @@ public class LsRule<T> : IRule
     {
         foreach (var action in Actions)
         {
-            SetPropertyValue(typedTarget, action.PropertyName, action.ValidValue);
+            action(typedTarget);
         }
     }
 
