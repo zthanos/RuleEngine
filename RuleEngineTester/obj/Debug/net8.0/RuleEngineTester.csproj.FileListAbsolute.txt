@@ -52,3 +52,5 @@ F:\source\dotnet\RuleEngineTester\RuleEngineTester\obj\Debug\net8.0\ref\RuleEngi
 F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\customer_rules.csv
 F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\plain_rules.txt
 F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\Newtonsoft.Json.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\obj\Debug\net8.0\RuleEngineTester.sourcelink.json
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\customer_rules.json
