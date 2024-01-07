@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "RuleEngineTester": {
+      "commandName": "Project",
+      "commandLineArgs": "validate-customer"
+    },
+    "WSL": {
+      "commandName": "WSL2",
+      "distributionName": ""
+    }
+  }
+}
