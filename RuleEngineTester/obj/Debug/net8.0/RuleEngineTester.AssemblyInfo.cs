@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RuleEngineTester ")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6b5f723da221b854d72a62995cd96d40e5f89bbf")]
 [assembly: System.Reflection.AssemblyProductAttribute("RuleEngineTester ")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RuleEngineTester ")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,12 +1,12 @@
 ﻿using Newtonsoft.Json;
-using System.Collections.Generic;
 using System.Reflection;
 
 namespace RuleEngineTester.RuleEngine;
 
-public class JsonRuleParser //: IConditionParser
+public class JsonRuleParser
 {
-    private readonly string _data;
+    private const string InvokeAddConditions = "AddConditions";
+    private const string InvokeAddActions = "AddActions";
 
     public static List<IRule> Parse(string fn)
     {
@@ -15,14 +15,16 @@ public class JsonRuleParser //: IConditionParser
         var ruleSet = JsonConvert.DeserializeObject<RuleSet>(data);
         foreach (var rule in ruleSet.Rules)
         {
-            Type type = Type.GetType(rule.AppliesTo);
+            if (string.IsNullOrWhiteSpace(rule.AppliesTo))
+            {
+                Console.WriteLine("Tatget is not defined");
+                continue;
+            }
 
+            Type type = Type.GetType(rule.AppliesTo);
             if (typeof(IRuleApplicable).IsAssignableFrom(type))
             {
-                // Construct the LsRule<> type using reflection
                 Type lsRuleType = typeof(LsRule<>).MakeGenericType(type);
-
-                // Create an instance of the constructed type
                 var lsRuleInstance = Activator.CreateInstance(lsRuleType);
                 var conditions = rule.Conditions.Select(condition => new Condition(
                     1,
@@ -30,11 +32,19 @@ public class JsonRuleParser //: IConditionParser
                     condition.Value,
                     condition.Type,
                     condition.Operator));
-                MethodInfo addConditionMethod = lsRuleType.GetMethod("AddConditions");
-                addConditionMethod.Invoke(lsRuleInstance, new object[] { conditions.ToList() });
-
-
-                rules.Add((IRule)lsRuleInstance);
+                var actions = rule.Actions.Select(action => new Action(action.Property, true, false));
+                MethodInfo? addConditionMethod = lsRuleType.GetMethod(InvokeAddConditions);
+                MethodInfo? addActionsMethod = lsRuleType.GetMethod(InvokeAddActions);
+                if (addConditionMethod != null && addActionsMethod != null)
+                {
+                    addConditionMethod?.Invoke(lsRuleInstance, new object[] { conditions.ToList() });
+                    addActionsMethod?.Invoke(lsRuleInstance, new object[] { actions.ToList() });
+                    rules.Add((IRule)lsRuleInstance!);
+                }
+                else
+                {
+                    Console.WriteLine($"Cannot invoke {InvokeAddConditions}");
+                }
             }
             else
             {
