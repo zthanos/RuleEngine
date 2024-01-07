@@ -1,0 +1,54 @@
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\obj\Debug\net8.0\RuleEngineTester.csproj.AssemblyReference.cache
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\obj\Debug\net8.0\RuleEngineTester.GeneratedMSBuildEditorConfig.editorconfig
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\obj\Debug\net8.0\RuleEngineTester.AssemblyInfoInputs.cache
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\obj\Debug\net8.0\RuleEngineTester.AssemblyInfo.cs
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\obj\Debug\net8.0\RuleEngineTester.csproj.CoreCompileInputs.cache
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\Cocona.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\Cocona.Core.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\Microsoft.Extensions.Configuration.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\Microsoft.Extensions.Configuration.Abstractions.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\Microsoft.Extensions.Configuration.Binder.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\Microsoft.Extensions.Configuration.CommandLine.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\Microsoft.Extensions.Configuration.EnvironmentVariables.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\Microsoft.Extensions.Configuration.FileExtensions.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\Microsoft.Extensions.Configuration.Json.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\Microsoft.Extensions.Configuration.UserSecrets.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\Microsoft.Extensions.FileProviders.Abstractions.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\Microsoft.Extensions.FileProviders.Physical.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\Microsoft.Extensions.FileSystemGlobbing.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\Microsoft.Extensions.Hosting.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\Microsoft.Extensions.Hosting.Abstractions.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\Microsoft.Extensions.Logging.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\Microsoft.Extensions.Logging.Configuration.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\Microsoft.Extensions.Logging.Console.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\Microsoft.Extensions.Logging.Debug.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\Microsoft.Extensions.Logging.EventLog.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\Microsoft.Extensions.Logging.EventSource.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\Microsoft.Extensions.Options.ConfigurationExtensions.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\Microsoft.Extensions.Primitives.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\System.Diagnostics.EventLog.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\ja-JP\Cocona.resources.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\ko-KR\Cocona.resources.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\ja-JP\Cocona.Core.resources.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\ko-KR\Cocona.Core.resources.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\zh-CN\Cocona.Core.resources.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Diagnostics.EventLog.Messages.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Diagnostics.EventLog.dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\obj\Debug\net8.0\RuleEngineTester.csproj.CopyComplete
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\obj\Debug\net8.0\RuleEngineTester.genruntimeconfig.cache
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\RuleEngineTester .exe
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\RuleEngineTester .deps.json
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\RuleEngineTester .runtimeconfig.json
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\RuleEngineTester .dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\RuleEngineTester .pdb
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\obj\Debug\net8.0\RuleEngineTester .dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\obj\Debug\net8.0\refint\RuleEngineTester .dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\obj\Debug\net8.0\RuleEngineTester .pdb
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\obj\Debug\net8.0\ref\RuleEngineTester .dll
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\customer_rules.csv
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\plain_rules.txt
+F:\source\dotnet\RuleEngineTester\RuleEngineTester\bin\Debug\net8.0\Newtonsoft.Json.dll

@@ -1,0 +1,10 @@
+Rule Name: KYCValidationRule
+
+When:
+  - Customer.Age > 18
+  - Customer.HomeAddress is not null
+  - Customer.Email is not null and IsValidEmail(Customer.Email)
+  - Customer.Phone is not null and IsValidPhoneNumber(Customer.Phone)
+
+Then:
+  - Set Customer.IsKYCValid to true

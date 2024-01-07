@@ -1,0 +1,6 @@
+HomeAddress|NotNull|and
+HomeAddress|NotEmpty|and
+Email|NotNull|and
+Email|NotEmpty|and
+Phone|NotNull|and
+Phone|NotEmpty|and
