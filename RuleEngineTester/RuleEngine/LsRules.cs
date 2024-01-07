@@ -6,6 +6,7 @@ public class LsRule<T> : IRule
     public IList<Func<T, bool>> ConditionFunctions { get; internal set; }
     public IList<Action<T>> Actions { get; internal set; }
 
+
     public void AddCondition(Condition condition) => ConditionFunctions.Add(CreateConditionFunc(condition));
     public void AddConditions(IList<Condition> conditions)
     {
@@ -15,18 +16,20 @@ public class LsRule<T> : IRule
         }
     }
 
+    public void AddAction(Action<T> action) => Actions.Add(action);
+    public void AddActions(IList<Action<T>> actions)
+    {
+        foreach (var action in actions)
+        {
+            AddAction(action);
+        }
+    }
+
     public LsRule()
     {
         ConditionFunctions = new ObservableCollection<Func<T, bool>>();
         Actions = new ObservableCollection<Action<T>>();
     }
-    public LsRule(IEnumerable<Func<T, bool>> conditions, IEnumerable<Action<T>> actions)
-    {
-        ConditionFunctions = new ReadOnlyCollection<Func<T, bool>>(conditions.ToList());
-        Actions = new ReadOnlyCollection<Action<T>>(actions.ToList());
-
-    }
-
 
     private Func<T, bool> CreateConditionFunc(Condition condition)
     {
@@ -52,6 +55,23 @@ public class LsRule<T> : IRule
         }
     }
 
+    private Action<T> ApplyAction(Action action)
+    {
+        return typedTarget =>
+        {
+            SetPropertyValue(typedTarget, action.PropertyName, action.ValidValue);
+        };
+    }
+
+    private void SetPropertyValue(T typedTarget, string propertyName, object value)
+    {
+        var property = typedTarget!.GetType().GetProperty(propertyName);
+        if (property != null && property.PropertyType == typeof(bool))
+        {
+            property.SetValue(typedTarget, value);
+        }
+        // Optionally, you might want to handle other property types or log a warning for unexpected types.
+    }
 
     private object? GetPropertyValue(T customer, string propertyName)
     {
