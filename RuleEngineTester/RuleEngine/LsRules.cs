@@ -4,7 +4,7 @@ namespace RuleEngineTester.RuleEngine;
 public class LsRule<T> : IRule
 {
     public IList<Func<T, bool>> ConditionFunctions { get; internal set; }
-    public IList<Action<T>> Actions { get; internal set; }
+    public IList<Action> Actions { get; internal set; }
 
 
     public void AddCondition(Condition condition) => ConditionFunctions.Add(CreateConditionFunc(condition));
@@ -16,8 +16,8 @@ public class LsRule<T> : IRule
         }
     }
 
-    public void AddAction(Action<T> action) => Actions.Add(action);
-    public void AddActions(IList<Action<T>> actions)
+    public void AddAction(Action action) => Actions.Add(action);
+    public void AddActions(IList<Action> actions)
     {
         foreach (var action in actions)
         {
@@ -28,7 +28,7 @@ public class LsRule<T> : IRule
     public LsRule()
     {
         ConditionFunctions = new ObservableCollection<Func<T, bool>>();
-        Actions = new ObservableCollection<Action<T>>();
+        Actions = new ObservableCollection<Action>();
     }
 
     private Func<T, bool> CreateConditionFunc(Condition condition)
@@ -53,14 +53,6 @@ public class LsRule<T> : IRule
             default:
                 throw new NotSupportedException($"Condition type '{condition.ConditionType}' is not supported.");
         }
-    }
-
-    private Action<T> ApplyAction(Action action)
-    {
-        return typedTarget =>
-        {
-            SetPropertyValue(typedTarget, action.PropertyName, action.ValidValue);
-        };
     }
 
     private void SetPropertyValue(T typedTarget, string propertyName, object value)
@@ -134,7 +126,7 @@ public class LsRule<T> : IRule
     {
         foreach (var action in Actions)
         {
-            action(typedTarget);
+            SetPropertyValue(typedTarget, action.PropertyName, action.ValidValue);
         }
     }
 
