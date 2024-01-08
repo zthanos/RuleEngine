@@ -53,6 +53,8 @@ namespace RuleEngineTester
         public void ValidateJsonParser()
         {
             var customer = TestData.GetCustomer();
+            Console.WriteLine(JsonConvert.SerializeObject(customer));
+
             var rules = JsonRuleParser.Parse("customer_rules.json");
             foreach (var rule in rules)
             {
