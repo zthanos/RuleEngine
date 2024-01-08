@@ -52,13 +52,13 @@ namespace RuleEngineTester
         [Command("validateCustomer")]
         public void ValidateJsonParser()
         {
-            var customer = new Customer();
+            var customer = TestData.GetCustomer();
             var rules = JsonRuleParser.Parse("customer_rules.json");
             foreach (var rule in rules)
             {
-                rule.ApplyRules(TestData.GetCustomer());
+                rule.ApplyRules(customer);
             }
-
+            Console.WriteLine(JsonConvert.SerializeObject(customer));
 
         }
         [Ignore]

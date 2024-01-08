@@ -39,7 +39,7 @@
       "actions": [
         {
           "type": "SetProperty",
-          "property": "IsKYCReady",
+          "property": "IsKYCValid",
           "value": true
         }
       ]
