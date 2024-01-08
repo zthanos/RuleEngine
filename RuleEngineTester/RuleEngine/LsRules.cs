@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using RuleEngineTester.RuleEngine.Evaluators;
+using System.Collections.ObjectModel;
 namespace RuleEngineTester.RuleEngine;
 
 public class LsRule<T> : IRule
@@ -33,26 +34,10 @@ public class LsRule<T> : IRule
 
     private Func<T, bool> CreateConditionFunc(Condition condition)
     {
-        switch (condition.ConditionType)
-        {
-            case ConditionType.Null:
-                return typedTarget => GetPropertyValue(typedTarget, condition.Name) == null;
-            case ConditionType.NotNull:
-                return typedTarget => GetPropertyValue(typedTarget, condition.Name) != null;
-            case ConditionType.NotEmpty:
-                return typedTarget => (string)GetPropertyValue(typedTarget, condition.Name)! != string.Empty;
-            //case ConditionType.GreaterThan:
-            //    // Assuming the property and condition value are of numeric types
-            //    var propertyValue = (IComparable)GetPropertyValue(typedTarget, condition.Name)!;
-            //    var conditionValue = (IComparable)condition.Value;
-            //    return typedTarget => propertyValue.CompareTo(conditionValue) > 0;
+        var evaluatorFactory = new ConditionEvaluatorFactory<T>();
+        var conditionEvaluator = evaluatorFactory.CreateConditionEvaluator(condition);
 
-            case ConditionType.None:
-                return customer => true;
-            // Add more cases for other condition types
-            default:
-                throw new NotSupportedException($"Condition type '{condition.ConditionType}' is not supported.");
-        }
+        return typedTarget => conditionEvaluator.Evaluate(typedTarget);
     }
 
     private void SetPropertyValue(T typedTarget, string propertyName, object value)
