@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using RuleEngineTester.RuleEngine;
 using RuleEngineTester.RuleEngine.Data;
+using RuleEngineTester.RuleEngine.Parser;
 
 namespace RuleEngineTester
 {
@@ -54,8 +55,8 @@ namespace RuleEngineTester
         {
             var customer = TestData.GetCustomer();
             Console.WriteLine(JsonConvert.SerializeObject(customer));
-
-            var rules = JsonRuleParser.Parse("customer_rules.json");
+            JsonRuleParser parser = new ();
+            var rules = parser.Parse("customer_rules.json");
             foreach (var rule in rules)
             {
                 rule.ApplyRules(customer);

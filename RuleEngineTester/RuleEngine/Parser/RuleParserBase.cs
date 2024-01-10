@@ -1,18 +1,15 @@
-﻿using Newtonsoft.Json;
-using System.Reflection;
+﻿using System.Reflection;
 
-namespace RuleEngineTester.RuleEngine;
+namespace RuleEngineTester.RuleEngine.Parser;
 
-public class JsonRuleParser
+public class RuleParserBase
 {
-    private const string InvokeAddConditions = "AddConditions";
-    private const string InvokeAddActions = "AddActions";
+    protected const string InvokeAddConditions = "AddConditions";
+    protected const string InvokeAddActions = "AddActions";
 
-    public static List<IRule> Parse(string fn)
+    public IList<IRule> ProcessRuleSet(RuleSet ruleSet)
     {
-        var rules = new List<IRule>();
-        var data = File.ReadAllText(fn);
-        var ruleSet = JsonConvert.DeserializeObject<RuleSet>(data);
+        var parsedRules = new List<IRule>();
         foreach (var rule in ruleSet.Rules)
         {
             if (string.IsNullOrWhiteSpace(rule.AppliesTo))
@@ -39,7 +36,7 @@ public class JsonRuleParser
                 {
                     addConditionMethod?.Invoke(lsRuleInstance, new object[] { conditions.ToList() });
                     addActionsMethod?.Invoke(lsRuleInstance, new object[] { actions.ToList() });
-                    rules.Add((IRule)lsRuleInstance!);
+                    parsedRules.Add((IRule)lsRuleInstance!);
                 }
                 else
                 {
@@ -51,38 +48,6 @@ public class JsonRuleParser
                 // Handle cases where the type doesn't implement IRuleApplicable
             }
         }
-
-        return rules;
+        return parsedRules;
     }
-
-}
-
-
-public class RuleCondition
-{
-    public string Property { get; set; }
-    public string Type { get; set; }
-    public string Operator { get; set; }
-    public Object? Value { get; set; }
-}
-
-public class RuleAction
-{
-    public string Type { get; set; }
-    public string Property { get; set; }
-    public object Value { get; set; }
-}
-
-public class JsonRule
-{
-    public string Name { get; set; }
-    public string AppliesTo { get; set; }
-    public int Order { get; set; }
-    public List<RuleCondition> Conditions { get; set; }
-    public List<RuleAction> Actions { get; set; }
-}
-
-public class RuleSet
-{
-    public List<JsonRule> Rules { get; set; }
 }
