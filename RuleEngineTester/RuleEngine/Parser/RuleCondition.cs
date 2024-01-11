@@ -6,4 +6,5 @@ public class RuleCondition
     public string Type { get; set; }
     public string Operator { get; set; }
     public object? Value { get; set; }
+    public List<RuleCondition> subConditions { get; set;}
 }

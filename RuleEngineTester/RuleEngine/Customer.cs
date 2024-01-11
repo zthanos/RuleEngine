@@ -18,3 +18,16 @@ public class Customer : IRuleApplicable
 }
 
 
+public class FinancialCustomer: IRuleApplicable
+{
+    public string Name { get; set; }
+    public string Email { get; set; }
+    public string Phone { get; set; }
+    public int Age { get; set; }
+    public bool HasValidCreditHistory { get; set; }
+    public bool IsEligible { get; set; }
+    public decimal Income { get; set; }
+    public bool IsEmployed { get; set; }
+    
+
+}

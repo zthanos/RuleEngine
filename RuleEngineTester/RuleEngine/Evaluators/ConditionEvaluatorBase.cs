@@ -1,4 +1,6 @@
-﻿namespace RuleEngineTester.RuleEngine.Evaluators;
+﻿using System.Linq.Expressions;
+
+namespace RuleEngineTester.RuleEngine.Evaluators;
 
 public abstract class ConditionEvaluatorBase<T> : IConditionEvaluator<T>
 {
@@ -9,4 +11,7 @@ public abstract class ConditionEvaluatorBase<T> : IConditionEvaluator<T>
     }
 
     public abstract bool Evaluate(T typedTarget);
+
+    public abstract Expression<Func<T, bool>> BuildExpression(ParameterExpression parameter);
+
 }

@@ -30,8 +30,9 @@ public class RuleParserBase
                     condition.Type,
                     condition.Operator));
                 var actions = rule.Actions.Select(action => new Action(action.Property, true, false));
-                MethodInfo? addConditionMethod = lsRuleType.GetMethod(InvokeAddConditions);
-                MethodInfo? addActionsMethod = lsRuleType.GetMethod(InvokeAddActions);
+                MethodInfo? addConditionMethod = lsRuleType.GetMethod(InvokeAddConditions, BindingFlags.Instance | BindingFlags.Public);
+                MethodInfo? addActionsMethod = lsRuleType.GetMethod(InvokeAddActions, BindingFlags.Instance | BindingFlags.Public);
+
                 if (addConditionMethod != null && addActionsMethod != null)
                 {
                     addConditionMethod?.Invoke(lsRuleInstance, new object[] { conditions.ToList() });
@@ -40,7 +41,7 @@ public class RuleParserBase
                 }
                 else
                 {
-                    Console.WriteLine($"Cannot invoke {InvokeAddConditions}");
+                    Console.WriteLine($"Cannot invoke {InvokeAddConditions} or {InvokeAddActions}");
                 }
             }
             else

@@ -1,0 +1,44 @@
+{
+  "rules": [
+    {
+      "name": "SampleRule",
+      "appliesTo": "RuleEngineTester.RuleEngine.FinancialCustomer",
+      "order": 1,
+      "conditions": [
+        {
+          "property": "Age",
+          "type": "GreaterThanOrEquals",
+          "value": 18,
+          "operator": "And"
+        },
+        {
+          "property": "Income",
+          "type": "GreaterThan",
+          "value": 50000,
+          "operator": "Or",
+          "subConditions": [
+            {
+              "property": "IsEmployed",
+              "type": "Equals",
+              "value": true,
+              "operator": "And"
+            },
+            {
+              "property": "HasValidCreditHistory",
+              "type": "Equals",
+              "value": true,
+              "operator": "And"
+            }
+          ]
+        }
+      ],
+      "actions": [
+        {
+          "type": "SetProperty",
+          "property": "IsEligible",
+          "value": true
+        }
+      ]
+    }
+  ]
+}

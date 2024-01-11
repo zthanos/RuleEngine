@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using RuleEngineTester.RuleEngine;
 using RuleEngineTester.RuleEngine.Data;
 using RuleEngineTester.RuleEngine.Parser;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace RuleEngineTester
 {
@@ -29,15 +30,15 @@ namespace RuleEngineTester
             //rules.AddRule(csv_rules);
             //rules.ApplyRules(customer);
 
-            
+
             //var conditions = new List<Condition>();
             //foreach (var csvRule in csv_rules)
             //{
 
             //    Console.WriteLine(JsonConvert.SerializeObject(csvRule));
-                
+
             //}
-            
+
             //CustomerRules<Customer> rules = new CustomerRules<Customer>(csv_rules.ToArray());
             //var customer = new Customer();
             //customer.Name = "thanos";
@@ -55,7 +56,7 @@ namespace RuleEngineTester
         {
             var customer = TestData.GetCustomer();
             Console.WriteLine(JsonConvert.SerializeObject(customer));
-            JsonRuleParser parser = new ();
+            JsonRuleParser parser = new();
             var rules = parser.Parse("customer_rules.json");
             foreach (var rule in rules)
             {
@@ -63,6 +64,31 @@ namespace RuleEngineTester
             }
             Console.WriteLine(JsonConvert.SerializeObject(customer));
 
+        }
+
+        /// <summary>
+        ///  the customer will be eligible (IsEligible will be set to true) under the following conditions:
+        ///
+        ///        The customer's age is greater than or equal to 18.
+        ///  Either:
+        ///         The customer's income is greater than 50,000.
+        ///  And either:
+        ///         The customer is employed(IsEmployed is true).
+        ///         The customer has a valid credit history(HasValidCreditHistory is true).
+        /// </summary>
+        /// <returns></returns>
+        [Command("isCustomerEligible")]
+        public void IsEligible()
+        {
+            var customer = TestData.GetFinancialCustomer();
+            Console.WriteLine(JsonConvert.SerializeObject(customer));
+            JsonRuleParser parser = new();
+            var rules = parser.Parse("customer_subcondition.json");
+            foreach (var rule in rules)
+            {
+                rule.ApplyRules(customer);
+            }
+            Console.WriteLine(JsonConvert.SerializeObject(customer));
         }
         [Ignore]
         public void ValidateParser()

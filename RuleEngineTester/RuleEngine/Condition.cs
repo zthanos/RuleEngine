@@ -8,6 +8,8 @@ public class Condition
     public object Value { get; }
     public ConditionType ConditionType { get; }
     public OperatorType Operator { get; set; }
+    public List<Condition> SubConditions { get; set; } = new List<Condition>();
+
 
 
     public Condition(int id, string propertyName, object? value, string type, string operatorName)
@@ -34,6 +36,8 @@ public class Condition
         {
             case "Null": return ConditionType.Null;
             case "NotNull": return ConditionType.NotNull;
+            case "Empty": return ConditionType.Empty;
+            case "NotEmpty": return ConditionType.NotEmpty;
             case "Equals": return ConditionType.Equals;
             case "NotEquals": return ConditionType.NotEquals;
             case "GreaterThan": return ConditionType.GreaterThan;
@@ -49,9 +53,9 @@ public class Condition
     {
         switch (name)
         {
-            case "And": return OperatorType.None;
-            case "Or": return OperatorType.And;
-            default: return OperatorType.Or;
+            case "And": return OperatorType.And;
+            case "Or": return OperatorType.Or;
+            default: return OperatorType.And;
         }
     }
 
@@ -66,9 +70,28 @@ public class Condition
             case ConditionType.GreaterThanOrEquals: return CompareValues(value, expectedValue) >= 0;
             case ConditionType.LessThanOrEquals: return CompareValues(value, expectedValue) <= 0;
             case ConditionType.Include: return IncludeCheck(value, expectedValue);
+            case ConditionType.Composite:
+                return EvaluateCompositeCondition(property, value, expectedValue);
+
         }
         return true;
 
+    }
+
+    private bool EvaluateCompositeCondition(string property, object? value, object? expectedValue)
+    {
+        // Evaluate sub-conditions based on the specified logical operator (AND or OR)
+        if (Operator == OperatorType.And)
+        {
+            return SubConditions.All(subCondition => subCondition.ExecuteCondition(property, value, expectedValue));
+        }
+        else if (Operator == OperatorType.Or)
+        {
+            return SubConditions.Any(subCondition => subCondition.ExecuteCondition(property, value, expectedValue));
+        }
+
+        // Default to true if the logical operator is not specified or recognized
+        return true;
     }
 
     private int CompareValues(object? value, object? expectedValue)
@@ -106,6 +129,7 @@ public enum ConditionType
     None,
     Null,
     NotNull,
+    Empty,
     NotEmpty,
     Equals,
     NotEquals,
@@ -113,7 +137,8 @@ public enum ConditionType
     LessThan,
     GreaterThanOrEquals,
     LessThanOrEquals,
-    Include
+    Include,
+    Composite
 }
 
 public enum OperatorType
