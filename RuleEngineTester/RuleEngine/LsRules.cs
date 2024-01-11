@@ -11,7 +11,7 @@ namespace RuleEngineTester.RuleEngine
         public IList<Func<T, bool>> ConditionFunctions { get; internal set; }
         public IList<Action> Actions { get; internal set; }
 
-        public void AddCondition(Condition condition) => ConditionFunctions.Add(CreateConditionFunc(condition));
+        public void AddCondition(Condition condition) => ConditionFunctions.Add(LsRule<T>.CreateConditionFunc(condition));
         public void AddConditions(IList<Condition> conditions)
         {
             foreach (var condition in conditions)
@@ -35,7 +35,7 @@ namespace RuleEngineTester.RuleEngine
             Actions = new ObservableCollection<Action>();
         }
 
-        private Func<T, bool> CreateConditionFunc(Condition condition)
+        private static Func<T, bool> CreateConditionFunc(Condition condition)
         {
             var parameter = Expression.Parameter(typeof(T));
             var evaluatorFactory = new ConditionEvaluatorFactory<T>();
@@ -60,7 +60,7 @@ namespace RuleEngineTester.RuleEngine
 
 
 
-        private void SetPropertyValue(T typedTarget, string propertyName, object value)
+        private static void SetPropertyValue(T typedTarget, string propertyName, object value)
         {
             var property = typedTarget!.GetType().GetProperty(propertyName);
             if (property != null && property.PropertyType == typeof(bool))
@@ -74,7 +74,7 @@ namespace RuleEngineTester.RuleEngine
         {
             foreach (var action in Actions)
             {
-                SetPropertyValue(typedTarget, action.PropertyName, action.ValidValue);
+                LsRule<T>.SetPropertyValue(typedTarget, action.PropertyName, action.ValidValue!);
             }
         }
 
@@ -94,7 +94,7 @@ namespace RuleEngineTester.RuleEngine
         {
             if (target is T typedTarget)
             {
-                List<string> failedConditions = new List<string>();
+                List<string> failedConditions = [];
 
                 foreach (var condition in ConditionFunctions)
                 {
@@ -120,7 +120,7 @@ namespace RuleEngineTester.RuleEngine
             }
         }
 
-        private string GetConditionDescription(Func<T, bool> condition)
+        private static string GetConditionDescription(Func<T, bool> condition)
         {
             // Provide a more human-readable description of the condition for logging or reporting
             // Example: "Age > 18"
@@ -138,7 +138,7 @@ namespace RuleEngineTester.RuleEngine
             }
 
             // Fallback to the default ToString() if condition.Target is null
-            return condition.Method.ToString();
+            return condition.Method.ToString()!;
         }
     }
 }

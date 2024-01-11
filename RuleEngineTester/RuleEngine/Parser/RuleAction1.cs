@@ -2,7 +2,7 @@
 
 public class RuleAction
 {
-    public string Type { get; set; }
-    public string Property { get; set; }
-    public object Value { get; set; }
+    public string? Type { get; set; }
+    public string? Property { get; set; }
+    public object? Value { get; set; }
 }

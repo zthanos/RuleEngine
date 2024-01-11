@@ -11,7 +11,7 @@ namespace RuleEngineTester
     public class TestCommands
     {
         [Ignore]
-        public void ValidateCustomer()
+        public static void ValidateCustomer()
         {
             //CSVFileConditionParser conditionParser = new CSVFileConditionParser("customer_rules.csv", "|");
             //var csv_rules = conditionParser.Parse();
@@ -52,7 +52,7 @@ namespace RuleEngineTester
         }
 
         [Command("validateCustomer")]
-        public void ValidateJsonParser()
+        public static void ValidateJsonParser()
         {
             var customer = TestData.GetCustomer();
             Console.WriteLine(JsonConvert.SerializeObject(customer));

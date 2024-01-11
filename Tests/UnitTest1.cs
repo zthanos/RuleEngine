@@ -16,11 +16,10 @@ namespace RuleEngineTester.Tests
             var customer = new Customer { Age = 25, IsActive = true, Name = "John" };
 
             var condition1 = new Condition(1, "Age", 21, "GreaterThanOrEquals", "And");
-            var condition2 = new Condition(2, "Name", "John", ConditionType.Equals, "And");
-            var condition0 = new Condition(2, "Name", "John", "NotNull", "And");
-            var subConditions = new List<Condition> { condition0, condition1, condition2 };
+            var condition2 = new Condition(2, "Name", "John", "Equals", "And");
+            var subConditions = new List<Condition> { condition1, condition2 };
 
-            var compositeCondition = new Condition(3, "", "", ConditionType.Composite, "And")
+            var compositeCondition = new Condition(3, "", "", "Composite", "And")
             {
                 SubConditions = subConditions
             };
@@ -45,6 +44,6 @@ namespace RuleEngineTester.Tests
     {
         public int Age { get; set; }
         public bool IsActive { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
     }
 }

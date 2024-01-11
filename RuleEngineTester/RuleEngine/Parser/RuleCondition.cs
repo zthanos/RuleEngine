@@ -2,9 +2,9 @@
 
 public class RuleCondition
 {
-    public string Property { get; set; }
-    public string Type { get; set; }
-    public string Operator { get; set; }
+    public string? Property { get; set; }
+    public string? Type { get; set; }
+    public string? Operator { get; set; }
     public object? Value { get; set; }
-    public List<RuleCondition> subConditions { get; set;}
+    public List<RuleCondition>? subConditions { get; set;}
 }

@@ -57,9 +57,11 @@ public class Rule
     public string RuleName { get; set; }
     public Rule(string name)
     {
+        Name = name;
         RuleName = name;
-        Conditions = new List<string>();
-        Actions = new List<string>();
+        Conditions = [];
+        Actions = [];
+        ConditionsParsed = [];
     }
     public void AddCondition(string condition)
     {

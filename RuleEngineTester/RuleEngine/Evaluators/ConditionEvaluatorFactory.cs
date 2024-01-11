@@ -17,15 +17,15 @@ namespace RuleEngineTester.RuleEngine.Evaluators
                 //case ConditionType.None:
                 //    return new NoneCondition<T>();
                 case ConditionType.GreaterThan:
-                    return new GreaterThanCondition<T>(condition.Name, condition.Value);
+                    return new GreaterThanCondition<T>(condition.Name, condition.Value!);
                 case ConditionType.GreaterThanOrEquals:
-                    return new GreaterThanOrEqualsCondition<T>(condition.Name, condition.Value);
+                    return new GreaterThanOrEqualsCondition<T>(condition.Name, condition.Value!);
                 case ConditionType.LessThan:
-                    return new LessThanCondition<T>(condition.Name, condition.Value);
+                    return new LessThanCondition<T>(condition.Name, condition.Value!);
                 case ConditionType.LessThanOrEquals:
-                    return new LessThanOrEqualsCondition<T>(condition.Name, condition.Value);
+                    return new LessThanOrEqualsCondition<T>(condition.Name, condition.Value!);
                 case ConditionType.Equals:
-                    return new EqualsCondition<T>(condition.Name, condition.Value);
+                    return new EqualsCondition<T>(condition.Name, condition.Value!);
                 case ConditionType.Composite:
                     return new CompositeConditionEvaluator<T>(condition.SubConditions);
                 // Add more cases for other condition types

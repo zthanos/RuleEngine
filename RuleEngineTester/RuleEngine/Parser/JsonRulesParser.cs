@@ -13,7 +13,7 @@ public class JsonRuleParser : RuleParserBase
             return (List<IRule>)ProcessRuleSet(ruleSet);
         }
         else
-            return new List<IRule>();
+            return [];
     }
 
 }

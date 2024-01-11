@@ -3,60 +3,64 @@
 public class Condition
 {
     public int Id { get; }
-    public string Description { get; set; }
+    //public string Description { get; set; }
     public string Name { get; }
-    public object Value { get; }
+    public object? Value { get; }
     public ConditionType ConditionType { get; }
     public OperatorType Operator { get; set; }
-    public List<Condition> SubConditions { get; set; } = new List<Condition>();
+    public List<Condition> SubConditions { get; set; }
 
 
 
     public Condition(int id, string propertyName, object? value, string type, string operatorName)
     {
         Id = id;
-        Description = $"{propertyName} {type} {value}";
+        //Description = $"{propertyName} {type} {value}";
         Name = propertyName;
         Value = value;
         ConditionType = GetConditionTypeByName(type);
         Operator = GetOperatorTypeByName(operatorName);
+        SubConditions = [];
+
+        
     }
-    public Condition(int id, string propertyName, string value, ConditionType type, string operatorName)
+    public Condition(int id, string propertyName, string? value, ConditionType type, string operatorName)
     {
         Id = id;
         Name = propertyName;
         Value = value;
         ConditionType = type;
         Operator = GetOperatorTypeByName(operatorName);
+        SubConditions = [];
     }
 
     public ConditionType GetConditionTypeByName(string name)
     {
-        switch (name)
+        return name switch
         {
-            case "Null": return ConditionType.Null;
-            case "NotNull": return ConditionType.NotNull;
-            case "Empty": return ConditionType.Empty;
-            case "NotEmpty": return ConditionType.NotEmpty;
-            case "Equals": return ConditionType.Equals;
-            case "NotEquals": return ConditionType.NotEquals;
-            case "GreaterThan": return ConditionType.GreaterThan;
-            case "LessThan": return ConditionType.LessThan;
-            case "GreaterThanOrEquals": return ConditionType.GreaterThanOrEquals;
-            case "LessThanOrEquals": return ConditionType.LessThanOrEquals;
-            case "Include": return ConditionType.Include;
-            default: return ConditionType.None;
-        }
+            "Null" => ConditionType.Null,
+            "NotNull" => ConditionType.NotNull,
+            "Empty" => ConditionType.Empty,
+            "NotEmpty" => ConditionType.NotEmpty,
+            "Equals" => ConditionType.Equals,
+            "NotEquals" => ConditionType.NotEquals,
+            "GreaterThan" => ConditionType.GreaterThan,
+            "LessThan" => ConditionType.LessThan,
+            "GreaterThanOrEquals" => ConditionType.GreaterThanOrEquals,
+            "LessThanOrEquals" => ConditionType.LessThanOrEquals,
+            "Include" => ConditionType.Include,
+            _ => ConditionType.None,
+        };
     }
 
     public OperatorType GetOperatorTypeByName(string name)
     {
-        switch (name)
+        return name switch
         {
-            case "And": return OperatorType.And;
-            case "Or": return OperatorType.Or;
-            default: return OperatorType.And;
-        }
+            "And" => OperatorType.And,
+            "Or" => OperatorType.Or,
+            _ => OperatorType.And,
+        };
     }
 
     public bool ExecuteCondition(string property, object? value, object? expectedValue)

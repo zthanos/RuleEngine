@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RuleEngineTester ")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3004e0368cccbdc2873726dde22547be5d0701ff")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0ea3fc691a7a33cbc839c43e06ffcd4377c44395")]
 [assembly: System.Reflection.AssemblyProductAttribute("RuleEngineTester ")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RuleEngineTester ")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

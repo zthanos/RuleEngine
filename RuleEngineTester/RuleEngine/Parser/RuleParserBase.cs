@@ -7,7 +7,7 @@ public class RuleParserBase
     protected const string InvokeAddConditions = "AddConditions";
     protected const string InvokeAddActions = "AddActions";
 
-    public IList<IRule> ProcessRuleSet(RuleSet ruleSet)
+    public static IList<IRule> ProcessRuleSet(RuleSet ruleSet)
     {
         var parsedRules = new List<IRule>();
         foreach (var rule in ruleSet.Rules)
@@ -18,18 +18,18 @@ public class RuleParserBase
                 continue;
             }
 
-            Type type = Type.GetType(rule.AppliesTo);
+            Type type = Type.GetType(rule.AppliesTo)!;
             if (typeof(IRuleApplicable).IsAssignableFrom(type))
             {
                 Type lsRuleType = typeof(LsRule<>).MakeGenericType(type);
                 var lsRuleInstance = Activator.CreateInstance(lsRuleType);
-                var conditions = rule.Conditions.Select(condition => new Condition(
+                var conditions = rule.Conditions!.Select(condition => new Condition(
                     1,
-                    condition.Property,
+                    condition.Property!,
                     condition.Value,
-                    condition.Type,
-                    condition.Operator));
-                var actions = rule.Actions.Select(action => new Action(action.Property, true, false));
+                    condition.Type!,
+                    condition.Operator!));
+                var actions = rule.Actions!.Select(action => new Action(action.Property!, true, false));
                 MethodInfo? addConditionMethod = lsRuleType.GetMethod(InvokeAddConditions, BindingFlags.Instance | BindingFlags.Public);
                 MethodInfo? addActionsMethod = lsRuleType.GetMethod(InvokeAddActions, BindingFlags.Instance | BindingFlags.Public);
 
