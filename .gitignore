@@ -7,12 +7,14 @@
 *.sln.docstates
 *.vsidx
 
+
+
 # Build results
 
 [Dd]ebug/
 [Rr]elease/
 x64/
-[Bb]in/
+bin/
 [Oo]bj/
 
 # MSTest test Results
@@ -133,3 +135,7 @@ $RECYCLE.BIN/
 
 _NCrunch*
 /.vs/RuleEngineTester/FileContentIndex/0571752e-8ce6-402e-8896-d1ab2c2fea23.vsidx
+/RuleEngineTester/obj/Debug/net8.0/ref/RuleEngineTester .dll
+/.vs/RuleEngineTester/DesignTimeBuild/.dtbcache.v2
+/.vs/RuleEngineTester/v17/.suo
+/RuleEngineTester/obj/Debug/net8.0/refint/RuleEngineTester .dll

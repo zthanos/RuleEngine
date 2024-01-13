@@ -26,6 +26,21 @@ namespace RuleEngineTester.RuleEngine.Data
             return customer;
 
         }
+
+        public static FinancialCustomer GetFinancialCustomer()
+        {
+            var customer = new FinancialCustomer();
+            customer.Name = "thanos";
+            customer.Phone = "645455444";
+            customer.Email = "asda@asdas.com";
+            customer.Age = 18;
+            customer.Income = 51000;
+            customer.HasValidCreditHistory = false;
+            customer.IsEmployed = false;
+            return customer;
+
+
+        }
     }
 }
 

@@ -1,5 +1,5 @@
 ﻿namespace RuleEngineTester.RuleEngine;
 
-internal interface IRuleApplicable
+public interface IRuleApplicable
 {
 }

@@ -2,7 +2,7 @@
   "profiles": {
     "RuleEngineTester": {
       "commandName": "Project",
-      "commandLineArgs": "validate-customer"
+      "commandLineArgs": " plain-text"
     },
     "WSL": {
       "commandName": "WSL2",
