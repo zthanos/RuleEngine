@@ -39,20 +39,22 @@ namespace RuleEngineTester.RuleEngine
             var evaluatorFactory = new ConditionEvaluatorFactory<T>();
             var conditionEvaluator = evaluatorFactory.CreateConditionEvaluator(condition);
 
-            if (condition.ConditionType == ConditionType.Composite)
-            {
-                var compositeConditionEvaluator = (CompositeConditionEvaluator<T>)conditionEvaluator;
-                var lambda = Expression.Lambda<Func<T, bool>>(
-                    compositeConditionEvaluator.BuildExpression(parameter),
-                    parameter
-                );
+            //if (condition.ConditionType == ConditionType.Composite)
+            //{
+            //    var compositeConditionEvaluator = (CompositeConditionEvaluator<T>)conditionEvaluator;
+            //    return compositeConditionEvaluator.BuildExpression(parameter).Compile();
 
-                return lambda.Compile();
-            }
-            else
-            {
+            //    //var lambda = Expression.Lambda<Func<T, bool>>(
+            //    //    compositeConditionEvaluator.BuildExpression(parameter),
+            //    //    parameter
+            //    //);
+
+            //    //return lambda.Compile();
+            //}
+            //else
+            //{
                 return conditionEvaluator.BuildExpression(parameter).Compile();
-            }
+            //}
         }
 
 
@@ -115,6 +117,7 @@ namespace RuleEngineTester.RuleEngine
             else
             {
                 // Handle the case where the target is not of the expected type
+                Console.WriteLine("Target is not of the expected type");
             }
         }
 

@@ -8,6 +8,6 @@ When:
   - Phone is notNull and  Phone notEmpty
 
 Then:
-  - Set Customer.IsKYCValid to true
+  - Set IsKYCValid to true
 
 Rule End

@@ -34,7 +34,13 @@ public class NotEqualsCondition<T> : ConditionEvaluatorBase<T>
         // Build expression for the GreaterThanOrEquals condition
         var propertyExpression = Expression.Property(parameter, propertyName);
         var expectedValueExpression = Expression.Constant(expectedValue);
-        var notEqualExpression = Expression.NotEqual(propertyExpression, expectedValueExpression);
+        var targetType = propertyExpression.Type; // The target type is the type of the property
+
+        object parsedValue = ConcertValueToType(expectedValue, targetType);
+        var parsedValueExpression = Expression.Constant(parsedValue, targetType);
+
+
+        var notEqualExpression = Expression.NotEqual(propertyExpression, parsedValueExpression);
 
         return Expression.Lambda<Func<T, bool>>(notEqualExpression, parameter);
     }

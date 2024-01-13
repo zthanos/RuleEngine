@@ -93,10 +93,16 @@ namespace RuleEngineTester
         [Command("plainText")]
         public void ValidateParser()
         {
+            var customer = TestData.GetCustomer();
+
             var data = File.ReadAllText("plain_rules.txt");
             var raw = new PlainTextRules(data);
-            raw.Parse("");
-
+            var rules = raw.Parse("");
+            foreach (var rule in rules)
+            {
+                rule.ApplyRules(customer);
+            }
+            Console.WriteLine(JsonConvert.SerializeObject(customer));
 
         }
     }
