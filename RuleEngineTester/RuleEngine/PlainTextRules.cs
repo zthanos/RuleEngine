@@ -53,7 +53,6 @@ public class PlainTextRules : RuleParserBase
         {
             Name = ExtractRuleName(_RuleText),
             AppliesTo = ExtractClassName(_RuleText),
-            Conditions = [],
             RuleConditions = [],
             Actions = []
         };

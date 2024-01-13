@@ -39,26 +39,9 @@ namespace RuleEngineTester.RuleEngine
             var evaluatorFactory = new ConditionEvaluatorFactory<T>();
             var conditionEvaluator = evaluatorFactory.CreateConditionEvaluator(condition);
 
-            //if (condition.ConditionType == ConditionType.Composite)
-            //{
-            //    var compositeConditionEvaluator = (CompositeConditionEvaluator<T>)conditionEvaluator;
-            //    return compositeConditionEvaluator.BuildExpression(parameter).Compile();
-
-            //    //var lambda = Expression.Lambda<Func<T, bool>>(
-            //    //    compositeConditionEvaluator.BuildExpression(parameter),
-            //    //    parameter
-            //    //);
-
-            //    //return lambda.Compile();
-            //}
-            //else
-            //{
+   
                 return conditionEvaluator.BuildExpression(parameter).Compile();
-            //}
         }
-
-
-
 
         private static void SetPropertyValue(T typedTarget, string propertyName, object value)
         {
