@@ -49,6 +49,7 @@ public class Condition
             "GreaterThanOrEquals" => ConditionType.GreaterThanOrEquals,
             "LessThanOrEquals" => ConditionType.LessThanOrEquals,
             "Include" => ConditionType.Include,
+            "Composite" => ConditionType.Composite,
             _ => ConditionType.None,
         };
     }

@@ -33,10 +33,10 @@ namespace RuleEngineTester.RuleEngine.Data
             customer.Name = "thanos";
             customer.Phone = "645455444";
             customer.Email = "asda@asdas.com";
-            customer.Age = 48;
+            customer.Age = 18;
             customer.Income = 51000;
-            customer.HasValidCreditHistory = true;
-            customer.IsEmployed = true;
+            customer.HasValidCreditHistory = false;
+            customer.IsEmployed = false;
             return customer;
 
 

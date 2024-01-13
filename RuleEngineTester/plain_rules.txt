@@ -1,10 +1,13 @@
 Rule Name: KYCValidationRule
+Applies to: RuleEngineTester.RuleEngine.Customer
 
 When:
-  - Customer.Age > 18
-  - Customer.HomeAddress is not null
-  - Customer.Email is not null and IsValidEmail(Customer.Email)
-  - Customer.Phone is not null and IsValidPhoneNumber(Customer.Phone)
+  - Age > 18
+  - HomeAddress is notNull
+  - Email is notNull and Email notEmpty or Email != 1
+  - Phone is notNull and  Phone notEmpty
 
 Then:
   - Set Customer.IsKYCValid to true
+
+Rule End

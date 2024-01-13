@@ -8,5 +8,7 @@ public class JsonRule
     public string? AppliesTo { get; set; }
     public int Order { get; set; }
     public List<RuleCondition>? Conditions { get; set; }
-    public List<RuleAction>? Actions { get; set; }
+    public List<Condition>? RuleConditions { get; set; }
+    public List<RuleAction>? RuleActions { get; set; }
+    public List<Action>? Actions { get; set; }
 }

@@ -32,19 +32,41 @@ namespace RuleEngineTester.RuleEngine.Evaluators
 
         public override Expression<Func<T, bool>> BuildExpression(ParameterExpression parameter)
         {
-            // Build expression for the GreaterThanOrEquals condition
-            var propertyExpression = Expression.Property(parameter, propertyName);
-            Expression expectedValueExpression = Expression.Constant(expectedValue);
+            //// Build expression for the GreaterThanOrEquals condition
+            //Expression propertyExpression = Expression.Property(parameter, propertyName);
+            //Expression expectedValueExpression = Expression.Constant(expectedValue);
 
-            // Convert expectedValue to the type of the property if they are not already the same type
-            if (propertyExpression.Type != expectedValueExpression.Type)
+            //// Convert expectedValue to the type of the property if they are not already the same type
+            //if (propertyExpression.Type != expectedValueExpression.Type)
+            //{
+            //    expectedValueExpression = Expression.Convert(expectedValueExpression, propertyExpression.Type);
+            //}
+
+            //var greaterThanOrEqualsExpression = Expression.GreaterThanOrEqual(propertyExpression, expectedValueExpression);
+
+            //return Expression.Lambda<Func<T, bool>>(greaterThanOrEqualsExpression, parameter);
+            var propertyExpression = Expression.Property(parameter, propertyName);
+            var expectedValueExpression = Expression.Constant(expectedValue);
+            var targetType = propertyExpression.Type; // The target type is the type of the property
+
+            // Use TypeConverter to convert the string to the target type
+            var converter = System.ComponentModel.TypeDescriptor.GetConverter(targetType);
+            object parsedValue = null;
+
+            if (converter.IsValid(expectedValue))
             {
-                expectedValueExpression = Expression.Convert(expectedValueExpression, propertyExpression.Type);
+                parsedValue = converter.ConvertFrom(expectedValue);
+            }
+            else
+            {
+                // Handle conversion failure
             }
 
-            var greaterThanOrEqualsExpression = Expression.GreaterThanOrEqual(propertyExpression, expectedValueExpression);
-
+            var parsedValueExpression = Expression.Constant(parsedValue, targetType);
+            var greaterThanOrEqualsExpression = Expression.GreaterThanOrEqual(propertyExpression, parsedValueExpression);
             return Expression.Lambda<Func<T, bool>>(greaterThanOrEqualsExpression, parameter);
+
         }
     }
 }
+

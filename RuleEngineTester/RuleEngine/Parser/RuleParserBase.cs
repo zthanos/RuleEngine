@@ -23,13 +23,9 @@ public class RuleParserBase
             {
                 Type lsRuleType = typeof(LsRule<>).MakeGenericType(type);
                 var lsRuleInstance = Activator.CreateInstance(lsRuleType);
-                var conditions = rule.Conditions!.Select(condition => new Condition(
-                    1,
-                    condition.Property!,
-                    condition.Value,
-                    condition.Type!,
-                    condition.Operator!));
-                var actions = rule.Actions!.Select(action => new Action(action.Property!, true, false));
+                var conditions = rule.RuleConditions;
+
+                var actions = rule.Actions!.Select(action => new Action(action.PropertyName!, true, false));
                 MethodInfo? addConditionMethod = lsRuleType.GetMethod(InvokeAddConditions, BindingFlags.Instance | BindingFlags.Public);
                 MethodInfo? addActionsMethod = lsRuleType.GetMethod(InvokeAddActions, BindingFlags.Instance | BindingFlags.Public);
 
@@ -47,6 +43,7 @@ public class RuleParserBase
             else
             {
                 // Handle cases where the type doesn't implement IRuleApplicable
+                Console.WriteLine("The type doesn't implement IRuleApplicable");
             }
         }
         return parsedRules;

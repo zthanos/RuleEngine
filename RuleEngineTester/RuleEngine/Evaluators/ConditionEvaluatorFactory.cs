@@ -6,32 +6,21 @@ namespace RuleEngineTester.RuleEngine.Evaluators
     {
         public IConditionEvaluator<T> CreateConditionEvaluator(Condition condition)
         {
-            switch (condition.ConditionType)
+            return condition.ConditionType switch
             {
-                case ConditionType.Null:
-                    return new NullCondition<T>(condition.Name);
-                case ConditionType.NotNull:
-                    return new NotNullCondition<T>(condition.Name);
-                case ConditionType.NotEmpty:
-                    return new NotEmptyCondition<T>(condition.Name);
-                //case ConditionType.None:
-                //    return new NoneCondition<T>();
-                case ConditionType.GreaterThan:
-                    return new GreaterThanCondition<T>(condition.Name, condition.Value!);
-                case ConditionType.GreaterThanOrEquals:
-                    return new GreaterThanOrEqualsCondition<T>(condition.Name, condition.Value!);
-                case ConditionType.LessThan:
-                    return new LessThanCondition<T>(condition.Name, condition.Value!);
-                case ConditionType.LessThanOrEquals:
-                    return new LessThanOrEqualsCondition<T>(condition.Name, condition.Value!);
-                case ConditionType.Equals:
-                    return new EqualsCondition<T>(condition.Name, condition.Value!);
-                case ConditionType.Composite:
-                    return new CompositeConditionEvaluator<T>(condition.SubConditions);
+                ConditionType.Null => new NullCondition<T>(condition.Name),
+                ConditionType.NotNull => new NotNullCondition<T>(condition.Name),
+                ConditionType.NotEmpty => new NotEmptyCondition<T>(condition.Name),
+                ConditionType.GreaterThan => new GreaterThanCondition<T>(condition.Name, condition.Value!),
+                ConditionType.GreaterThanOrEquals => new GreaterThanOrEqualsCondition<T>(condition.Name, condition.Value!),
+                ConditionType.LessThan => new LessThanCondition<T>(condition.Name, condition.Value!),
+                ConditionType.LessThanOrEquals => new LessThanOrEqualsCondition<T>(condition.Name, condition.Value!),
+                ConditionType.Equals => new EqualsCondition<T>(condition.Name, condition.Value!),
+                ConditionType.NotEquals => new NotEqualsCondition<T>(condition.Name, condition.Value!),
+                ConditionType.Composite => new CompositeConditionEvaluator<T>(condition.SubConditions),
                 // Add more cases for other condition types
-                default:
-                    throw new NotSupportedException($"Condition type '{condition.ConditionType}' is not supported.");
-            }
+                _ => throw new NotSupportedException($"Condition type '{condition.ConditionType}' is not supported."),
+            };
         }
     }
 
@@ -67,8 +56,33 @@ namespace RuleEngineTester.RuleEngine.Evaluators
 
         public Expression<Func<T, bool>> BuildExpression(ParameterExpression parameter)
         {
-            // You need to implement the logic to build the composite expression here
-            throw new NotImplementedException("BuildExpression not implemented in CompositeConditionEvaluator.");
+            // Build expressions for sub-conditions and combine them based on the logical operator
+            Expression combinedExpression = null;
+
+            foreach (var condition in subConditions)
+            {
+                var conditionEvaluator = new ConditionEvaluatorFactory<T>().CreateConditionEvaluator(condition);
+                var conditionExpression = conditionEvaluator.BuildExpression(parameter);
+
+                if (combinedExpression == null)
+                {
+                    // First condition
+                    combinedExpression = conditionExpression.Body;
+                }
+                else
+                {
+                    // Combine with AND logic for now; you might extend it to handle OR
+                    combinedExpression = Expression.AndAlso(combinedExpression, conditionExpression.Body);
+                }
+            }
+
+            if (combinedExpression == null)
+            {
+                // No sub-conditions
+                return null;
+            }
+
+            return Expression.Lambda<Func<T, bool>>(combinedExpression, parameter);
         }
     }
 

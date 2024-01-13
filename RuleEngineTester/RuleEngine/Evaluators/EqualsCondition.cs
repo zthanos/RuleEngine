@@ -35,9 +35,9 @@ namespace RuleEngineTester.RuleEngine.Evaluators
             // Build expression for the GreaterThanOrEquals condition
             var propertyExpression = Expression.Property(parameter, propertyName);
             var expectedValueExpression = Expression.Constant(expectedValue);
-            var greaterThanOrEqualsExpression = Expression.GreaterThanOrEqual(propertyExpression, expectedValueExpression);
+            var equalExpression = Expression.Equal(propertyExpression, expectedValueExpression);
 
-            return Expression.Lambda<Func<T, bool>>(greaterThanOrEqualsExpression, parameter);
+            return Expression.Lambda<Func<T, bool>>(equalExpression, parameter);
         }
     }
 }

@@ -90,11 +90,12 @@ namespace RuleEngineTester
             }
             Console.WriteLine(JsonConvert.SerializeObject(customer));
         }
-        [Ignore]
+        [Command("plainText")]
         public void ValidateParser()
         {
             var data = File.ReadAllText("plain_rules.txt");
             var raw = new PlainTextRules(data);
+            raw.Parse("");
 
 
         }
