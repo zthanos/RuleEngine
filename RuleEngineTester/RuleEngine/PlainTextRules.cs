@@ -18,7 +18,7 @@ namespace RuleEngineTester.RuleEngine;
 //Then:
 //  - Set Customer.IsKYCValid to true
 /// </summary>
-public class PlainTextRules : RuleParserBase
+public class PlainTextRules<T> : RuleParserBase<T> where T : class
 {
     protected readonly string _RuleText;
     public PlainTextRules(string ruleText)

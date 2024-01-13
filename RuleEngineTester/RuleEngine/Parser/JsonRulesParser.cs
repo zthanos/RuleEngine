@@ -1,16 +1,16 @@
 ﻿using Newtonsoft.Json;
 
 namespace RuleEngineTester.RuleEngine.Parser;
-public class JsonRuleParser : RuleParserBase
+public class JsonRuleParser<T> : RuleParserBase<T>
 {
-    public List<IRule> Parse(string fn)
+    public List<IRule<IRuleApplicable>> Parse(string fn)
     {
         var data = File.ReadAllText(fn);
         var ruleSet = JsonConvert.DeserializeObject<RuleSet>(data);
         if (ruleSet != null)
         {
 
-            return (List<IRule>)ProcessRuleSet(ruleSet);
+            return (List<IRule<IRuleApplicable>>)ProcessRuleSet(ruleSet);
         }
         else
             return [];

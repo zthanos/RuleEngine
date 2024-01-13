@@ -1,8 +1,14 @@
 ﻿
+
 namespace RuleEngineTester.RuleEngine;
+public interface IRule<T>
+{
+    public void ApplyRules(T target);
+}
+
 public interface IRule
 {
-    void ApplyRules(object target);
-    //IList<Action<T>> Actions { get; }
-    //IList<Func<T, bool>> Conditions { get; }
+    void AddActions(IList<Action> actions);
+    void AddConditions(IList<Condition> conditions);
+
 }

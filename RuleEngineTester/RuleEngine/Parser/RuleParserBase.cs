@@ -1,8 +1,6 @@
-﻿using System.Reflection;
+﻿namespace RuleEngineTester.RuleEngine.Parser;
 
-namespace RuleEngineTester.RuleEngine.Parser;
-
-public class RuleParserBase
+public class RuleParserBase<T>
 {
     protected const string InvokeAddConditions = "AddConditions";
     protected const string InvokeAddActions = "AddActions";
@@ -10,41 +8,41 @@ public class RuleParserBase
     public static IList<IRule> ProcessRuleSet(RuleSet ruleSet)
     {
         var parsedRules = new List<IRule>();
-        foreach (var rule in ruleSet.Rules)
+        try
         {
-            if (string.IsNullOrWhiteSpace(rule.AppliesTo))
+            foreach (var rule in ruleSet.Rules)
             {
-                Console.WriteLine("Tatget is not defined");
-                continue;
-            }
-
-            Type type = Type.GetType(rule.AppliesTo)!;
-            if (typeof(IRuleApplicable).IsAssignableFrom(type))
-            {
-                Type lsRuleType = typeof(LsRule<>).MakeGenericType(type);
-                var lsRuleInstance = Activator.CreateInstance(lsRuleType);
-                var conditions = rule.RuleConditions;
-
-                var actions = rule.Actions!.Select(action => new Action(action.PropertyName!, true, false));
-                MethodInfo? addConditionMethod = lsRuleType.GetMethod(InvokeAddConditions, BindingFlags.Instance | BindingFlags.Public);
-                MethodInfo? addActionsMethod = lsRuleType.GetMethod(InvokeAddActions, BindingFlags.Instance | BindingFlags.Public);
-
-                if (addConditionMethod != null && addActionsMethod != null)
+                if (string.IsNullOrWhiteSpace(rule.AppliesTo))
                 {
-                    addConditionMethod?.Invoke(lsRuleInstance, new object[] { conditions.ToList() });
-                    addActionsMethod?.Invoke(lsRuleInstance, new object[] { actions.ToList() });
-                    parsedRules.Add((IRule)lsRuleInstance!);
+                    Console.WriteLine("Target is not defined");
+                    continue;
+                }
+
+                Type type = Type.GetType(rule.AppliesTo)!;
+
+                // Ensure the type implements IRuleApplicable at compile-time
+                if (typeof(IRuleApplicable).IsAssignableFrom(type))
+                {
+                    var lsRuleType = typeof(LsRule<>).MakeGenericType(type);
+                    var lsRuleInstance = (IRule)Activator.CreateInstance(lsRuleType);
+
+                    var conditions = rule.RuleConditions;
+                    var actions = rule.Actions!.Select(action => new Action(action.PropertyName!, true, false));
+
+                    // Add conditions and actions to lsRuleInstance
+                    lsRuleInstance.AddConditions(conditions);
+                    lsRuleInstance.AddActions(actions.ToList());
+
+                    parsedRules.Add(lsRuleInstance);
                 }
                 else
                 {
-                    Console.WriteLine($"Cannot invoke {InvokeAddConditions} or {InvokeAddActions}");
+                    Console.WriteLine($"The type '{type}' doesn't implement IRuleApplicable");
                 }
             }
-            else
-            {
-                // Handle cases where the type doesn't implement IRuleApplicable
-                Console.WriteLine("The type doesn't implement IRuleApplicable");
-            }
+        } catch (Exception ex) 
+        { 
+            Console.WriteLine(ex.ToString());
         }
         return parsedRules;
     }

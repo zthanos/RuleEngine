@@ -56,11 +56,15 @@ namespace RuleEngineTester
         {
             var customer = TestData.GetCustomer();
             Console.WriteLine(JsonConvert.SerializeObject(customer));
-            JsonRuleParser parser = new();
+            JsonRuleParser<IRuleApplicable> parser = new();
             var rules = parser.Parse("customer_rules.json");
             foreach (var rule in rules)
             {
-                rule.ApplyRules(customer);
+                if (rule is LsRule<Customer> lsRule)
+                {
+                    lsRule.ApplyRules(customer);
+                }
+                //rule.ApplyRules(customer);
             }
             Console.WriteLine(JsonConvert.SerializeObject(customer));
 
@@ -80,15 +84,18 @@ namespace RuleEngineTester
         [Command("isCustomerEligible")]
         public void IsEligible()
         {
-            var customer = TestData.GetFinancialCustomer();
-            Console.WriteLine(JsonConvert.SerializeObject(customer));
-            JsonRuleParser parser = new();
+            FinancialCustomer financialCustomer = TestData.GetFinancialCustomer();
+            Console.WriteLine(JsonConvert.SerializeObject(financialCustomer));
+            JsonRuleParser<IRuleApplicable> parser = new();
             var rules = parser.Parse("customer_subcondition.json");
             foreach (var rule in rules)
             {
-                rule.ApplyRules(customer);
+                if (rule is LsRule<FinancialCustomer> lsRule)
+                {
+                    lsRule.ApplyRules(financialCustomer);
+                }
             }
-            Console.WriteLine(JsonConvert.SerializeObject(customer));
+            Console.WriteLine(JsonConvert.SerializeObject(financialCustomer));
         }
         [Command("plainText")]
         public void ValidateParser()
@@ -96,11 +103,14 @@ namespace RuleEngineTester
             var customer = TestData.GetCustomer();
 
             var data = File.ReadAllText("plain_rules.txt");
-            var raw = new PlainTextRules(data);
+            var raw = new PlainTextRules<IRuleApplicable>(data);
             var rules = raw.Parse("");
             foreach (var rule in rules)
             {
-                rule.ApplyRules(customer);
+                if (rule is LsRule<Customer> lsRule)
+                {
+                    lsRule.ApplyRules(customer);
+                }
             }
             Console.WriteLine(JsonConvert.SerializeObject(customer));
 
