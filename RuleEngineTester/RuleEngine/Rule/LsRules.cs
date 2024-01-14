@@ -1,14 +1,16 @@
-﻿using RuleEngineTester.RuleEngine.Evaluators;
-using System.Collections.ObjectModel;
+﻿using RuleEngineTester.RuleEngine.Actions;
+using RuleEngineTester.RuleEngine.Conditions;
+using RuleEngineTester.RuleEngine.Evaluators;
+using RuleEngineTester.RuleEngine.Rule.Interfaces;
 using System.Linq.Expressions;
 
-namespace RuleEngineTester.RuleEngine
+namespace RuleEngineTester.RuleEngine.Rule
 {
     public class LsRule<T> : IRule<T>, IRule
     {
-        private Func<T, bool> combinedCondition;
+        private Func<T, bool>? combinedCondition;
 
-        private IList<Action> _Actions = [];
+        private readonly IList<RuleAction> _Actions = [];
 
         public void AddCondition(Condition condition)
         {
@@ -36,10 +38,10 @@ namespace RuleEngineTester.RuleEngine
             }
         }
 
-        public void AddConditions(IList<Condition> conditions) => conditions.ToList().ForEach(f=> AddCondition(f));
+        public void AddConditions(IList<Condition> conditions) => conditions.ToList().ForEach(f => AddCondition(f));
 
-        public void AddAction(Action action) => _Actions.Add(action);
-        public void AddActions(IList<Action> actions)
+        public void AddAction(RuleAction action) => _Actions.Add(action);
+        public void AddActions(IList<RuleAction> actions)
         {
             foreach (var action in actions)
             {

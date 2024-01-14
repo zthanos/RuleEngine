@@ -1,6 +1,10 @@
 ﻿using System.Text.RegularExpressions;
+using RuleEngineTester.RuleEngine.Actions;
+using RuleEngineTester.RuleEngine.Conditions;
+using RuleEngineTester.RuleEngine.Parser.Common.Resolvers;
+using RuleEngineTester.RuleEngine.Parser.Common.Types;
 
-namespace RuleEngineTester.RuleEngine.Parser;
+namespace RuleEngineTester.RuleEngine.Parser.Common;
 public static class RegexHelper
 {
     private static readonly RegexOptions _RegexOptions = RegexOptions.Multiline;
@@ -33,7 +37,7 @@ public static class RegexHelper
             plainTextConditions,
             PatternTypeResolver.ResolvePatternForType(PatternType.ConditionsParse),
             _RegexOptions);
-        foreach(var matched_condition in matched_conditions.Select(s => s.Groups[1].Value))
+        foreach (var matched_condition in matched_conditions.Select(s => s.Groups[1].Value))
         {
             var subconditions = ExtractSubConditions(matched_condition);
 
@@ -73,8 +77,9 @@ public static class RegexHelper
             {
                 var res = match.Select(s => s).Skip(idx).Take(2).ToArray();
                 var parsed = ExtractOperator(res.First());
-                if (parsed != null) {
-                    string logical_operator = (res.Length > 1 && res.Last() == "or") ? "or" : "and";
+                if (parsed != null)
+                {
+                    string logical_operator = res.Length > 1 && res.Last() == "or" ? "or" : "and";
                     result.Add(new Condition(1, parsed.Left, parsed.Right, parsed.Operation, logical_operator));
                 }
                 else
@@ -88,9 +93,9 @@ public static class RegexHelper
         return result;
     }
 
-    public static List<Action> ExtractActions(string ruleText)
+    public static List<RuleAction> ExtractActions(string ruleText)
     {
-        List<Action> result = [];
+        List<RuleAction> result = [];
         const int PropertyIdx = 2;
         const int ValueIdx = 4;
         var match = Regex.Matches(ruleText, PatternTypeResolver.ResolvePatternForType(PatternType.ActionsSplit), _RegexOptions);
@@ -105,15 +110,15 @@ public static class RegexHelper
             throw new Exception("Error in action Definition");
         }
 
-        result.Add(new Action(matched_conditions[PropertyIdx], matched_conditions[ValueIdx].RemoveNewLine(), null));
-        
+        result.Add(new RuleAction(matched_conditions[PropertyIdx], matched_conditions[ValueIdx].RemoveNewLine(), null));
+
         return result;
     }
 
 
     public static ConditionExpression? ExtractOperator(string condition)
     {
-        
+
         var match = Regex.Split(condition, PatternTypeResolver.ResolvePatternForType(PatternType.Operator), _RegexOptions);
 
         if (match.Count() > 1)
@@ -134,8 +139,8 @@ public class ConditionExpression
         Operation = operation;
         Right = right?.RemoveNewLine();
     }
-    public string Left { get; set;}
+    public string Left { get; set; }
     public string? Right { get; set; }
-    public string Operation{ get; set; }
+    public string Operation { get; set; }
 
 }

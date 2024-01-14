@@ -1,4 +1,4 @@
-﻿namespace RuleEngineTester.RuleEngine;
+﻿namespace RuleEngineTester.RuleEngine.Conditions;
 
 public class Condition
 {
@@ -22,7 +22,7 @@ public class Condition
         Operator = GetOperatorTypeByName(operatorName);
         SubConditions = [];
 
-        
+
     }
     public Condition(int id, string propertyName, string? value, ConditionType type, string operatorName)
     {
@@ -69,7 +69,7 @@ public class Condition
         switch (Value)
         {
             case ConditionType.NotNull: return value != null;
-            case ConditionType.NotEquals: return !object.Equals(value, expectedValue);
+            case ConditionType.NotEquals: return !Equals(value, expectedValue);
             case ConditionType.GreaterThan: return CompareValues(value, expectedValue) > 0;
             case ConditionType.LessThan: return CompareValues(value, expectedValue) < 0;
             case ConditionType.GreaterThanOrEquals: return CompareValues(value, expectedValue) >= 0;
@@ -108,7 +108,7 @@ public class Condition
         }
 
         // Default to equality if types are not comparable
-        return object.Equals(value, expectedValue) ? 0 : 1;
+        return Equals(value, expectedValue) ? 0 : 1;
     }
 
     private bool IncludeCheck(object? value, object? expectedValue)

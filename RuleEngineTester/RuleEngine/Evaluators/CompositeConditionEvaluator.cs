@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using RuleEngineTester.RuleEngine.Conditions;
 
 namespace RuleEngineTester.RuleEngine.Evaluators;
 
@@ -35,7 +36,7 @@ public class CompositeConditionEvaluator<T> : IConditionEvaluator<T>
     public Expression<Func<T, bool>> BuildExpression(ParameterExpression parameter)
     {
         // Build expressions for sub-conditions and combine them based on the logical operator
-        Expression combinedExpression = null;
+        Expression? combinedExpression = null;
 
         foreach (var condition in subConditions)
         {
@@ -63,7 +64,7 @@ public class CompositeConditionEvaluator<T> : IConditionEvaluator<T>
 
         //return Expression.Lambda<Func<T, bool>>(flattenedExpression, parameter);
 
-        return Expression.Lambda<Func<T, bool>>(combinedExpression, parameter);
+        return Expression.Lambda<Func<T, bool>>(combinedExpression!, parameter);
     }
 
     public static Expression FlattenAndAlso(Expression expression)

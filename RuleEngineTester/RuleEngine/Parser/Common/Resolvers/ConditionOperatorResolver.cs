@@ -1,5 +1,4 @@
-﻿
-namespace RuleEngineTester.RuleEngine.Parser;
+﻿namespace RuleEngineTester.RuleEngine.Parser.Common.Resolvers;
 
 public class ConditionOperatorResolver
 {

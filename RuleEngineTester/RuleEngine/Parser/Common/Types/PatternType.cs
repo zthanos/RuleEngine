@@ -1,4 +1,4 @@
-﻿namespace RuleEngineTester.RuleEngine.Parser;
+﻿namespace RuleEngineTester.RuleEngine.Parser.Common.Types;
 
 public enum PatternType
 {

@@ -1,6 +1,9 @@
-﻿using RuleEngineTester.RuleEngine.Parser;
+﻿using RuleEngineTester.RuleEngine.Parser.Common;
+using RuleEngineTester.RuleEngine.Parser.Common.Resolvers;
+using RuleEngineTester.RuleEngine.Parser.Common.Types;
+using RuleEngineTester.RuleEngine.Rule.Interfaces;
 
-namespace RuleEngineTester.RuleEngine;
+namespace RuleEngineTester.RuleEngine.Parser.PlainText;
 
 /// <summary>
 /// Rule Name: KYCValidationRule
@@ -16,7 +19,6 @@ namespace RuleEngineTester.RuleEngine;
 /// </summary>
 public class PlainTextRules<T> : RuleParserBase<T> where T : class
 {
-    private readonly RuleSet ruleSet = new();
 
     protected readonly string _RuleText;
     public PlainTextRules(string ruleText)
@@ -26,8 +28,10 @@ public class PlainTextRules<T> : RuleParserBase<T> where T : class
     private string GetTypeFromDescription(string description) => ConditionOperatorResolver.ResolveOperator(description);
 
 
-    public List<IRule> Parse(string ruleText)
+    public static List<IRule> Parse(string ruleText)
     {
+        RuleSet ruleSet = new();
+
         var ruleToAdd = new JsonRule
         {
             Name = RegexHelper.ExtractRuleName(ruleText),
@@ -38,4 +42,5 @@ public class PlainTextRules<T> : RuleParserBase<T> where T : class
         ruleSet.Rules.Add(ruleToAdd);
         return (List<IRule>)ProcessRuleSet(ruleSet);
     }
+
 }

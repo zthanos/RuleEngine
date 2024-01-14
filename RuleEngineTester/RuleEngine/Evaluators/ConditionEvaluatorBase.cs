@@ -13,18 +13,15 @@ public abstract class ConditionEvaluatorBase<T> : IConditionEvaluator<T>
     protected object ConcertValueToType(object expectedValue, Type targetType)
     {
         var converter = System.ComponentModel.TypeDescriptor.GetConverter(targetType);
-        object parsedValue = null;
-
         if (converter.IsValid(expectedValue))
         {
-            parsedValue = converter.ConvertFrom(expectedValue);
+            return converter.ConvertFrom(expectedValue)!;
         }
         else
         {
             // Handle conversion failure
+            throw new InvalidOperationException($"{expectedValue} ConvertValueToType failed {targetType.ToString()}");
         }
-
-        return parsedValue;
     }
 
     public abstract bool Evaluate(T typedTarget);

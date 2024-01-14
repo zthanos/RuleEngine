@@ -2,7 +2,10 @@
 using Newtonsoft.Json;
 using RuleEngineTester.RuleEngine;
 using RuleEngineTester.RuleEngine.Data;
-using RuleEngineTester.RuleEngine.Parser;
+using RuleEngineTester.RuleEngine.Parser.Json;
+using RuleEngineTester.RuleEngine.Parser.PlainText;
+using RuleEngineTester.RuleEngine.Rule;
+using RuleEngineTester.RuleEngine.Rule.Interfaces;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace RuleEngineTester
@@ -103,8 +106,7 @@ namespace RuleEngineTester
             var customer = TestData.GetCustomer();
 
             var data = File.ReadAllText("plain_rules.txt");
-            var raw = new PlainTextRules<IRuleApplicable>(data);
-            var rules = raw.Parse(data);
+            var rules = PlainTextRules<IRuleApplicable>.Parse(data);
             foreach (var rule in rules)
             {
                 if (rule is LsRule<Customer> lsRule)

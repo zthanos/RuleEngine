@@ -1,4 +1,9 @@
-﻿namespace RuleEngineTester.RuleEngine.Parser;
+﻿using RuleEngineTester.RuleEngine.Actions;
+using RuleEngineTester.RuleEngine.Parser.Common.Types;
+using RuleEngineTester.RuleEngine.Rule;
+using RuleEngineTester.RuleEngine.Rule.Interfaces;
+
+namespace RuleEngineTester.RuleEngine.Parser.Common;
 
 public class RuleParserBase<T>
 {
@@ -27,7 +32,7 @@ public class RuleParserBase<T>
                     var lsRuleInstance = (IRule)Activator.CreateInstance(lsRuleType)!;
 
                     var conditions = rule.RuleConditions;
-                    var actions = rule.Actions!.Select(action => new Action(action.PropertyName!, true, false));
+                    var actions = rule.Actions!.Select(action => new RuleAction(action.PropertyName!, true, false));
 
                     // Add conditions and actions to lsRuleInstance
                     lsRuleInstance.AddConditions(conditions!);
@@ -40,8 +45,9 @@ public class RuleParserBase<T>
                     Console.WriteLine($"The type '{type}' doesn't implement IRuleApplicable");
                 }
             }
-        } catch (Exception ex) 
-        { 
+        }
+        catch (Exception ex)
+        {
             Console.WriteLine(ex.ToString());
         }
         return parsedRules;

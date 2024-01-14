@@ -1,4 +1,5 @@
-﻿using RuleEngineTester.RuleEngine.Parser;
+﻿using RuleEngineTester.RuleEngine.Actions;
+using RuleEngineTester.RuleEngine.Conditions;
 
 namespace RuleEngineTester.RuleEngine;
 
@@ -9,5 +10,5 @@ public class JsonRule
     public int Order { get; set; }
     public List<Condition>? RuleConditions { get; set; }
 
-    public List<Action>? Actions { get; set; }
+    public List<RuleAction>? Actions { get; set; }
 }

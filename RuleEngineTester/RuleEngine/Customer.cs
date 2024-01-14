@@ -1,4 +1,6 @@
-﻿namespace RuleEngineTester.RuleEngine;
+﻿using RuleEngineTester.RuleEngine.Rule.Interfaces;
+
+namespace RuleEngineTester.RuleEngine;
 
 public class Customer : IRuleApplicable
 {

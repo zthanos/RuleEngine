@@ -1,10 +1,12 @@
-﻿namespace RuleEngineTester.RuleEngine.Parser;
+﻿using RuleEngineTester.RuleEngine.Parser.Common.Types;
+
+namespace RuleEngineTester.RuleEngine.Parser.Common.Resolvers;
 
 public static class PatternTypeResolver
 {
     public static string ResolvePatternForType(PatternType patternType)
     {
-        return (patternType) switch
+        return patternType switch
         {
             PatternType.RuleName => @"Rule Name:\s*(.*?)\n",
             PatternType.ClassName => @"Applies to:\s*(.*?)\n",

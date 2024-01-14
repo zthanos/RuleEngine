@@ -1,9 +1,9 @@
-﻿namespace RuleEngineTester.RuleEngine;
+﻿namespace RuleEngineTester.RuleEngine.Actions;
 
 
-public class Action
+public class RuleAction
 {
-    public Action(string propertyName, object? validValue, object? invalidValue)
+    public RuleAction(string propertyName, object? validValue, object? invalidValue)
     {
         PropertyName = propertyName;
         ValidValue = validValue;
