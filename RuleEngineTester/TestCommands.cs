@@ -104,7 +104,7 @@ namespace RuleEngineTester
 
             var data = File.ReadAllText("plain_rules.txt");
             var raw = new PlainTextRules<IRuleApplicable>(data);
-            var rules = raw.Parse("");
+            var rules = raw.Parse(data);
             foreach (var rule in rules)
             {
                 if (rule is LsRule<Customer> lsRule)

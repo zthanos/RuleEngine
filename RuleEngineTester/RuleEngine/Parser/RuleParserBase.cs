@@ -24,13 +24,13 @@ public class RuleParserBase<T>
                 if (typeof(IRuleApplicable).IsAssignableFrom(type))
                 {
                     var lsRuleType = typeof(LsRule<>).MakeGenericType(type);
-                    var lsRuleInstance = (IRule)Activator.CreateInstance(lsRuleType);
+                    var lsRuleInstance = (IRule)Activator.CreateInstance(lsRuleType)!;
 
                     var conditions = rule.RuleConditions;
                     var actions = rule.Actions!.Select(action => new Action(action.PropertyName!, true, false));
 
                     // Add conditions and actions to lsRuleInstance
-                    lsRuleInstance.AddConditions(conditions);
+                    lsRuleInstance.AddConditions(conditions!);
                     lsRuleInstance.AddActions(actions.ToList());
 
                     parsedRules.Add(lsRuleInstance);
