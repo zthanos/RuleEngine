@@ -1,4 +1,7 @@
-﻿namespace RuleEngineTester.RuleEngine
+﻿using RuleEngineTester.RuleEngine.Conditions;
+using RuleEngineTester.RuleEngine.Rule.Interfaces;
+
+namespace RuleEngineTester.RuleEngine.Parser.CSV
 {
     public class CSVFileConditionParser : IConditionParser
     {

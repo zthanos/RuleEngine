@@ -1,5 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RuleEngineTester.RuleEngine;
+using RuleEngineTester.RuleEngine.Conditions;
 using RuleEngineTester.RuleEngine.Evaluators;
 using System;
 using System.Collections.Generic;

@@ -1,4 +1,6 @@
-﻿namespace RuleEngineTester.RuleEngine.Evaluators;
+﻿using RuleEngineTester.RuleEngine.Conditions;
+
+namespace RuleEngineTester.RuleEngine.Evaluators;
 
 public class ConditionEvaluatorFactory<T>
 {

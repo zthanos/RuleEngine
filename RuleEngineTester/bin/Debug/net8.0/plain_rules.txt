@@ -3,9 +3,9 @@ Applies to: RuleEngineTester.RuleEngine.Customer
 
 When:
   - Age > 18
-  - HomeAddress is notNull
-  - Email is notNull and Email notEmpty or Email != 1
-  - Phone is notNull and  Phone notEmpty
+  - HomeAddress isNotNull
+  - Email isNotNull and Email notEmpty or Email != 1
+  - Phone isNotNull and  Phone notEmpty
 
 Then:
   - Set IsKYCValid to true

@@ -1,4 +1,6 @@
-﻿namespace RuleEngineTester.RuleEngine;
+﻿using RuleEngineTester.RuleEngine.Conditions;
+
+namespace RuleEngineTester.RuleEngine.Rule.Interfaces;
 
 public interface IRulesProcessor<T>
 {
