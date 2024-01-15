@@ -139,3 +139,10 @@ _NCrunch*
 /.vs/RuleEngineTester/DesignTimeBuild/.dtbcache.v2
 /.vs/RuleEngineTester/v17/.suo
 /RuleEngineTester/obj/Debug/net8.0/refint/RuleEngineTester .dll
+/RuleEngineTester/obj/Debug/net8.0/RuleEngineTester.assets.cache
+/RuleEngineTester/obj/Debug/net8.0/RuleEngineTester.csproj.FileListAbsolute.txt
+/RuleEngineTester/obj/Debug/net8.0/RuleEngineTester.GeneratedMSBuildEditorConfig.editorconfig
+/RuleEngineTester/obj/Debug/net8.0/RuleEngineTester.genruntimeconfig.cache
+/RuleEngineTester/obj/project.assets.json
+/RuleEngineTester/obj/project.nuget.cache
+/RuleEngineTester/obj/RuleEngineTester.csproj.nuget.dgspec.json

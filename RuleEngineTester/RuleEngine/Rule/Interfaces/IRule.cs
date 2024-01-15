@@ -11,5 +11,9 @@ public interface IRule
 {
     void AddActions(IList<RuleAction> actions);
     void AddConditions(IList<Condition> conditions);
+    void SetRuleName(string name);
+    void SetAppliesTo(string  appliesTo);
+    void AddCondition(Condition condition);
+    void AddAction(RuleAction action);
 
 }

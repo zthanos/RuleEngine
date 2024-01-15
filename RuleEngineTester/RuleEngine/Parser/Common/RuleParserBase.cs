@@ -1,7 +1,9 @@
 ﻿using RuleEngineTester.RuleEngine.Actions;
+using RuleEngineTester.RuleEngine.ErrorHandling;
 using RuleEngineTester.RuleEngine.Parser.Common.Types;
 using RuleEngineTester.RuleEngine.Rule;
 using RuleEngineTester.RuleEngine.Rule.Interfaces;
+using System.Data;
 
 namespace RuleEngineTester.RuleEngine.Parser.Common;
 
@@ -13,42 +15,38 @@ public class RuleParserBase<T>
     public static IList<IRule> ProcessRuleSet(RuleSet ruleSet)
     {
         var parsedRules = new List<IRule>();
-        try
+
+        foreach (var rule in ruleSet.Rules)
         {
-            foreach (var rule in ruleSet.Rules)
+            if (string.IsNullOrWhiteSpace(rule.AppliesTo))
             {
-                if (string.IsNullOrWhiteSpace(rule.AppliesTo))
-                {
-                    Console.WriteLine("Target is not defined");
-                    continue;
-                }
-
-                Type type = Type.GetType(rule.AppliesTo)!;
-
-                // Ensure the type implements IRuleApplicable at compile-time
-                if (typeof(IRuleApplicable).IsAssignableFrom(type))
-                {
-                    var lsRuleType = typeof(LsRule<>).MakeGenericType(type);
-                    var lsRuleInstance = (IRule)Activator.CreateInstance(lsRuleType)!;
-
-                    var conditions = rule.RuleConditions;
-                    var actions = rule.Actions!.Select(action => new RuleAction(action.PropertyName!, true, false));
-
-                    // Add conditions and actions to lsRuleInstance
-                    lsRuleInstance.AddConditions(conditions!);
-                    lsRuleInstance.AddActions(actions.ToList());
-
-                    parsedRules.Add(lsRuleInstance);
-                }
-                else
-                {
-                    Console.WriteLine($"The type '{type}' doesn't implement IRuleApplicable");
-                }
+                throw new RuleEngineException("Target is not defined:");
             }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.ToString());
+
+            Type type = Type.GetType(rule.AppliesTo)!;
+            if (type is null) {
+                throw new RuleEngineException($"The type '{rule.AppliesTo}' cannot be resolved!");
+            }
+
+            // Ensure the type implements IRuleApplicable at compile-time
+            if (typeof(IRuleApplicable).IsAssignableFrom(type))
+            {
+                var lsRuleType = typeof(LsRule<>).MakeGenericType(type);
+                var lsRuleInstance = (IRule)Activator.CreateInstance(lsRuleType)!;
+
+                var conditions = rule.RuleConditions;
+                var actions = rule.Actions!.Select(action => new RuleAction(action.PropertyName!, true, false));
+
+                // Add conditions and actions to lsRuleInstance
+                lsRuleInstance.AddConditions(conditions!);
+                lsRuleInstance.AddActions(actions.ToList());
+
+                parsedRules.Add(lsRuleInstance);
+            }
+            else
+            {
+                throw new RuleEngineException($"The type '{type}' doesn't implement IRuleApplicable");
+            }
         }
         return parsedRules;
     }
