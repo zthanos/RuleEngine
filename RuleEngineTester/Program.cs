@@ -1,6 +1,5 @@
 ﻿using Cocona;
 using RuleEngineTester;
-using RuleEngineTester.RuleEngine;
 
 var builder = CoconaApp.CreateBuilder();
 

@@ -1,6 +1,8 @@
-﻿using RuleEngineTester.RuleEngine.Parser.Common;
+﻿using RuleEngineTester.RuleEngine.Evaluators;
+using RuleEngineTester.RuleEngine.Parser.Common;
 using RuleEngineTester.RuleEngine.Parser.Common.Resolvers;
 using RuleEngineTester.RuleEngine.Parser.Common.Types;
+using RuleEngineTester.RuleEngine.Rule;
 using RuleEngineTester.RuleEngine.Rule.Interfaces;
 
 namespace RuleEngineTester.RuleEngine.Parser.PlainText;
@@ -17,7 +19,7 @@ namespace RuleEngineTester.RuleEngine.Parser.PlainText;
 //Then:
 //  - Set Customer.IsKYCValid to true
 /// </summary>
-public class PlainTextRules<T> : RuleParserBase<T> where T : class
+public class PlainTextRules<T> where T : class
 {
 
     protected readonly string _RuleText;
@@ -30,17 +32,17 @@ public class PlainTextRules<T> : RuleParserBase<T> where T : class
 
     public static List<IRule> Parse(string ruleText)
     {
-        RuleSet ruleSet = new();
+        List<IRule> ruleSet = new();
 
-        var ruleToAdd = new JsonRule
-        {
-            Name = RegexHelper.ExtractRuleName(ruleText),
-            AppliesTo = RegexHelper.ExtractClassName(ruleText),
-            RuleConditions = RegexHelper.ExtractConditions(ruleText),
-            Actions = RegexHelper.ExtractActions(ruleText)
-        };
-        ruleSet.Rules.Add(ruleToAdd);
-        return (List<IRule>)ProcessRuleSet(ruleSet);
+
+        var rule = LsRule<T>.CreateBuilder()
+            .ForType(RegexHelper.ExtractClassName(ruleText))
+            .WithRuleName(RegexHelper.ExtractRuleName(ruleText))
+            .AddConditions(RegexHelper.ExtractConditions(ruleText).ToList())
+            .AddActions(RegexHelper.ExtractActions(ruleText).ToList())
+            .Build();
+        ruleSet.Add(rule);
+        return ruleSet;
     }
 
 }
