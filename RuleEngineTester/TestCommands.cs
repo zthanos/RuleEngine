@@ -1,18 +1,34 @@
 ﻿using Cocona;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
+using Newtonsoft.Json.Schema.Generation;
 using RuleEngineTester.RuleEngine;
+using RuleEngineTester.RuleEngine.Conditions;
 using RuleEngineTester.RuleEngine.Data;
 using RuleEngineTester.RuleEngine.Parser.Json;
 using RuleEngineTester.RuleEngine.Parser.PlainText;
 using RuleEngineTester.RuleEngine.Rule;
 using RuleEngineTester.RuleEngine.Rule.Interfaces;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using RuleEngineTester.RuleEngine.WeaklyTyped;
+using System;
+using System.Text.Json.Nodes;
 
 namespace RuleEngineTester
 {
 
     public class TestCommands
     {
+
+        private readonly ILogger<TestCommands> _logger;
+
+        public TestCommands(ILogger<TestCommands> logger)
+        {
+            _logger = logger;
+        }
+
+
         [Ignore]
         public static void ValidateCustomer()
         {
@@ -115,6 +131,45 @@ namespace RuleEngineTester
                 }
             }
             Console.WriteLine(JsonConvert.SerializeObject(customer));
+
+        }
+
+        [Command("weaklyTyped")]
+        public void Weak()
+        {
+            var customer = TestData.GetCustomer();
+            JSchemaGenerator generator = new();
+            JSchema schema = generator.Generate(typeof(Customer));
+            var json = JsonConvert.SerializeObject(customer);
+
+           RuleEngine.WeaklyTyped.RuleCondition
+                .CreateBuilder(_logger)
+                .InitCondition("Age", ConditionType.Null, customer.GetType(), 18)
+                .Build();
+            Int64 age = 19;
+             RuleEngine.WeaklyTyped.RuleCondition
+                .CreateBuilder(_logger)
+                .InitCondition("Age", ConditionType.GreaterThan, customer.GetType(), 18)
+                .Build();
+            var cond = RuleEngine.WeaklyTyped.RuleCondition
+                .CreateBuilder(_logger)
+                .InitCondition("Email", ConditionType.NotNull, typeof(string), null)
+                .AndCondition("Email", ConditionType.NotEmpty, typeof(string), null)
+                .OrCondition("Email", ConditionType.NotEquals, typeof(string), "1")
+                .Build();
+            // var data = File.ReadAllText("plain_rules.txt");
+            // var ruleEngine = new RuleEngine.WeaklyTyped.Rules(_logger);
+
+            List<RuleCondition> conditions = new List<RuleCondition>();
+            ConditionEvaluator.EvaluateConditions(schema, json, cond.Conditions);
+
+            conditions.Add(cond);
+            var r = RuleEngine.WeaklyTyped.Rule
+                .CreateBuilder(_logger)
+                .ForType(nameof(Customer), schema)
+
+                .Build();
+
 
         }
     }
