@@ -142,12 +142,12 @@ namespace RuleEngineTester
             JSchema schema = generator.Generate(typeof(Customer));
             var json = JsonConvert.SerializeObject(customer);
 
-           RuleEngine.WeaklyTyped.RuleCondition
+           var cond1 = RuleEngine.WeaklyTyped.RuleCondition
                 .CreateBuilder(_logger)
                 .InitCondition("Age", ConditionType.Null, customer.GetType(), 18)
                 .Build();
             Int64 age = 19;
-             RuleEngine.WeaklyTyped.RuleCondition
+            var cond2 = RuleEngine.WeaklyTyped.RuleCondition
                 .CreateBuilder(_logger)
                 .InitCondition("Age", ConditionType.GreaterThan, customer.GetType(), 18)
                 .Build();
@@ -160,17 +160,18 @@ namespace RuleEngineTester
             // var data = File.ReadAllText("plain_rules.txt");
             // var ruleEngine = new RuleEngine.WeaklyTyped.Rules(_logger);
 
-            List<RuleCondition> conditions = new List<RuleCondition>();
-            ConditionEvaluator.EvaluateConditions(schema, json, cond.Conditions);
+            //List<RuleCondition> conditions = new List<RuleCondition>();
+            //Func<JObject, bool> compiledLambda = ConditionEvaluator.EvaluateConditions(schema, json, cond.Conditions);
 
-            conditions.Add(cond);
+            //conditions.Add(cond);
             var r = RuleEngine.WeaklyTyped.Rule
                 .CreateBuilder(_logger)
                 .ForType(nameof(Customer), schema)
-
+                .AddCondition(cond)
+                .AddCondition(cond2)
                 .Build();
 
-
+            r.ApplyRule(json);
         }
     }
 }

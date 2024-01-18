@@ -11,6 +11,7 @@ public class Rule : IRule
     private readonly ILogger _logger;
     private JSchema _typeToApplyRule;
     private string _applyToType;
+    private List<RuleCondition> _conditons = new();
 
     public Rule(ILogger logger)
     {
@@ -20,6 +21,12 @@ public class Rule : IRule
     {
         _applyToType = type;
         _typeToApplyRule = jsonSchema;
+    }
+
+    public void AddCondition(RuleCondition condition)
+    {
+        _conditons.Add(condition);
+        
     }
 
     public void ApplyRule(string jsonData)
@@ -35,7 +42,28 @@ public class Rule : IRule
         };
         // Deserialize using the validating reader
         JsonSerializer serializer = new JsonSerializer();
-        var data = serializer.Deserialize(validatingReader);
+        var data = serializer.Deserialize<JObject>(validatingReader);
+        if (data is null ) 
+        {
+            throw new RuleEngineException("Invalid Object.");
+        }
+        foreach ( RuleCondition condition in _conditons )
+        {
+            List<bool> results = [];
+            var res = condition.Evaluate(data);
+            results.Add(res);
+
+            if (results.All(w => w == true))
+            {
+                // Condition is satisfied
+                _logger.LogInformation($"Condition '{condition.ExpressionToExecute}' is satisfied.");
+            }
+            else
+            {
+                // Condition is not satisfied
+                _logger.LogInformation($"Condition '{condition.Conditions.First().PropertyName}' is not satisfied.");
+            }
+        }
     }
 
     public JSchema GetApplyToType() => _typeToApplyRule;
@@ -66,7 +94,12 @@ public class Rule : IRule
         {
             return this;
         }
-
+     
+        public RuleBuilder AddCondition(RuleCondition ruleCondition)
+        {
+            _rule.AddCondition(ruleCondition);
+            return this;
+        }
         public IRule Build() => _rule;
     }
 }
