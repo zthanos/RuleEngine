@@ -146,7 +146,6 @@ namespace RuleEngineTester
                 .CreateBuilder(_logger)
                 .InitCondition("Age", ConditionType.Null, customer.GetType(), 18)
                 .Build();
-            Int64 age = 19;
             var cond2 = RuleEngine.WeaklyTyped.RuleCondition
                 .CreateBuilder(_logger)
                 .InitCondition("Age", ConditionType.GreaterThan, customer.GetType(), 18)
@@ -169,6 +168,7 @@ namespace RuleEngineTester
                 .ForType(nameof(Customer), schema)
                 .AddCondition(cond)
                 .AddCondition(cond2)
+                .AddAction(new RuleAction("IsKYCValid", true))
                 .Build();
 
             r.ApplyRule(json);

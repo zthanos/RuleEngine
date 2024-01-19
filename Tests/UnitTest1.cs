@@ -39,6 +39,7 @@ namespace RuleEngineTester.Tests
         // You can add more tests for other conditions and scenarios
     }
 
+
     // Mock class for testing
     public class Customer
     {

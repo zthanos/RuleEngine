@@ -1,11 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Schema;
-using Newtonsoft.Json;
 using RuleEngineTester.RuleEngine.Conditions;
-using System.Linq.Expressions;
 using RuleEngineTester.RuleEngine.ErrorHandling;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Linq.Expressions;
 
 namespace RuleEngineTester.RuleEngine.WeaklyTyped;
 
@@ -17,6 +14,7 @@ public class RuleCondition
     public RuleCondition(ILogger logger)
     {
         _logger = logger;
+        _description = string.Empty;
     }
     public List<RuleConditionDefinition> _conditions = new();
 
@@ -26,6 +24,7 @@ public class RuleCondition
     {
         _conditions.Add(ruleConditionDefinition);
     }
+
     public bool Evaluate(JObject target)
     {
 
@@ -36,13 +35,14 @@ public class RuleCondition
         // var target = ConvertToObject(schema, jsonData);
         var targetParameter = Expression.Parameter(typeof(JObject), "target");
 
-        Expression c = null;
+        Expression? c = null;
         foreach (var definition in condition.Conditions)
         {
             if (c == null)
                 c = ConditionEvaluator.CreateConditionEvaluator(target, definition);
             else if (definition.ConditionOperator == OperatorType.And)
             {
+                
                 c = Expression.AndAlso(c, ConditionEvaluator.CreateConditionEvaluator(target, definition));
             }
             else
@@ -50,65 +50,12 @@ public class RuleCondition
                 c = Expression.OrElse(c, ConditionEvaluator.CreateConditionEvaluator(target, definition));
             }
         }
-        _description = c.ToString();
+        _description = c!.ToString();
         return Expression.Lambda<Func<JObject, bool>>(c, targetParameter).Compile();
     }
     public static ConditionBuilder CreateBuilder(ILogger logger)
     {
         return new ConditionBuilder(logger);
-    }
-
-    public class ConditionBuilder
-    {
-        private RuleCondition _condition;
-
-        private readonly ILogger _logger;
-
-        public ConditionBuilder(ILogger logger)
-        {
-            _logger = logger;
-            _condition = new(_logger);
-        }
-
-        public ConditionBuilder InitCondition(string property, ConditionType condition, Type type, object? value)
-        {
-            RuleConditionDefinition ruleConditionDefinition = new(
-                property,
-                condition,
-                type,
-                value,
-                OperatorType.And);
-            _condition.Add(ruleConditionDefinition);
-            return this;
-        }
-        public ConditionBuilder AndCondition(string property, ConditionType condition, Type type, object? value)
-        {
-            RuleConditionDefinition ruleConditionDefinition = new(
-               property,
-               condition,
-               type,
-               value,
-               OperatorType.And);
-            _condition.Add(ruleConditionDefinition);
-
-            return this;
-        }
-        public ConditionBuilder OrCondition(string property, ConditionType condition, Type type, object? value)
-        {
-            RuleConditionDefinition ruleConditionDefinition = new(
-               property,
-               condition,
-               type,
-               value,
-               OperatorType.Or);
-            _condition.Add(ruleConditionDefinition);
-
-            return this;
-        }
-        public RuleCondition Build()
-        {
-            return _condition;
-        }
     }
 
 }
@@ -121,7 +68,7 @@ public class ConditionEvaluator
         _logger = logger;
     }
 
-    public static Expression CreateConditionEvaluator(JObject? target, RuleConditionDefinition condition)
+    public static Expression CreateConditionEvaluator(JObject target, RuleConditionDefinition condition)
     {
         var parameter = Expression.Parameter(typeof(JObject), "item");
         var propertyAccess = Expression.Call(parameter, "Property", null, Expression.Constant(condition.PropertyName));
@@ -132,7 +79,7 @@ public class ConditionEvaluator
             throw new RuleEngineException("Unable to retrieve type");
         }
         var value = ((JValue)propertyData).Value;
-        var conditionValue = Expression.Convert(Expression.Constant(condition.Value), value.GetType());
+        var conditionValue = Expression.Convert(Expression.Constant(condition.Value), value!.GetType());
        
         return condition.ConditionType switch
         {

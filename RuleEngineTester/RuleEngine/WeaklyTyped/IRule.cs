@@ -5,10 +5,11 @@ namespace RuleEngineTester.RuleEngine.WeaklyTyped;
 
 public interface IRule
 {
-    void ApplyRule(string jsonData);
+    RuleExecutionResult ApplyRule(string jsonData);
     JSchema GetApplyToType();
     string GetApplyToTypeName();
     void SetType(string type, JSchema jsonSchema);
     //Dictionary<string, object> SetRuleType(object target);
     void AddCondition(RuleCondition ruleCondition);
+    void AddAction(RuleAction action);
 }

@@ -1,14 +1,13 @@
 ﻿using Microsoft.Extensions.Logging;
-using RuleEngineTester.RuleEngine.Conditions;
-using RuleEngineTester.RuleEngine.Evaluators;
-using System.Linq.Expressions;
-using static RuleEngineTester.RuleEngine.WeaklyTyped.Rule;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace RuleEngineTester.RuleEngine.WeaklyTyped;
 public class Rules
 {
     private IEnumerable<IRule> _rules;
     private readonly ILogger _logger;
+    private List<RuleExecutionResult> _rulesExecutionResult = [];
 
     public Rules(ILogger logger)
     {
@@ -21,28 +20,30 @@ public class Rules
         _rules = _rules.Append(rule);
     }
 
-    public void ExecuteRules(Dictionary<string, string> targets)
+    public IEnumerable<RuleExecutionResult> GetRuleExecutionResults() => _rulesExecutionResult;
+    public bool RuleApplied => _rulesExecutionResult.All(w=>w.Succeed);
+    public JObject? ExecuteRules(string jsonData)
     {
+        JObject? result = null;
         foreach (var rule in _rules)
         {
             var applyToType = rule.GetApplyToTypeName();
-            if (targets.TryGetValue(applyToType, out string? jsonData))
+
+            if (jsonData != null)
             {
-                if (jsonData != null)
-                {
-                    rule.ApplyRule(jsonData);
-                }
-                else
-                {
-                    // Log or handle the case where the target for the rule is not found
-                    _logger.LogInformation($"{applyToType} not found in rule definition");
-                }
+
+                var executionResult = rule.ApplyRule(jsonData);
+                jsonData = JsonConvert.SerializeObject(executionResult.Target);
+                _rulesExecutionResult.Add(executionResult);
+                result = executionResult.Target;
             }
             else
             {
-                _logger.LogInformation($"No target found for {applyToType}");
+                // Log or handle the case where the target for the rule is not found
+                _logger.LogInformation($"{applyToType} not found in rule definition");
             }
         }
+        return result;
     }
 
     private object RetrieveTargetToApplyRule(string applyToType)
@@ -50,10 +51,5 @@ public class Rules
         // Apply search to retrieve the specific object based on applyToType
         return _rules.First(f => f.GetApplyToTypeName() == applyToType);
     }
-}
-
-public class RuleAction
-{
-
 }
 

@@ -3,15 +3,17 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using RuleEngineTester.RuleEngine.ErrorHandling;
+using System.Threading.Tasks.Dataflow;
 
 namespace RuleEngineTester.RuleEngine.WeaklyTyped;
 
 public class Rule : IRule
 {
     private readonly ILogger _logger;
-    private JSchema _typeToApplyRule;
-    private string _applyToType;
+    private JSchema? _typeToApplyRule;
+    private string? _applyToType;
     private List<RuleCondition> _conditons = new();
+    private List<RuleAction> _actions = new();
 
     public Rule(ILogger logger)
     {
@@ -26,13 +28,41 @@ public class Rule : IRule
     public void AddCondition(RuleCondition condition)
     {
         _conditons.Add(condition);
-        
+
     }
 
-    public void ApplyRule(string jsonData)
+    public void AddAction(RuleAction action) => _actions.Add(action);
+    public void ExecuteAction(JObject target)
+    {
+
+        foreach (var action in _actions)
+        {
+            // Access the property in the JObject
+            JToken propertyValue = target.Property(action.PropertyName)?.Value!;
+
+            // Modify the property value based on the action
+            action.Execute(target);
+
+            // Update the property in the JObject
+            //if (target.Property(action.PropertyName) is JProperty property)
+            //{
+            //    property.Value = newValue;
+            //}
+        }
+        _logger.LogInformation($"Action applied to: {target}");
+    }
+
+    //public void SetPropertyValue(JObject target, string propertyName, object value)
+    //{
+
+    //}
+
+
+    public RuleExecutionResult ApplyRule(string jsonData)
     {
         JObject jObj = JObject.Parse(jsonData);
-        _logger.LogDebug($"Type : {_applyToType} \n Data: \n {jsonData}");
+        //_logger.LogDebug($"Type : {_applyToType} \n Data: \n {jsonData}");
+
         JsonTextReader reader = new JsonTextReader(new StringReader(jsonData));
         JSchemaValidatingReader validatingReader = new JSchemaValidatingReader(reader);
         validatingReader.Schema = _typeToApplyRule;
@@ -43,63 +73,46 @@ public class Rule : IRule
         // Deserialize using the validating reader
         JsonSerializer serializer = new JsonSerializer();
         var data = serializer.Deserialize<JObject>(validatingReader);
-        if (data is null ) 
+        _logger.LogInformation($"Apply rule to: {data}");
+
+        if (data is null)
         {
             throw new RuleEngineException("Invalid Object.");
         }
-        foreach ( RuleCondition condition in _conditons )
+        bool ruledPassed = false;
+        Dictionary<string, bool> conditionResult = new();
+        foreach (RuleCondition condition in _conditons)
         {
-            List<bool> results = [];
             var res = condition.Evaluate(data);
-            results.Add(res);
-
-            if (results.All(w => w == true))
+            conditionResult.Add(condition.ExpressionToExecute, res);
+            if (res)
             {
+                ruledPassed = true;
                 // Condition is satisfied
                 _logger.LogInformation($"Condition '{condition.ExpressionToExecute}' is satisfied.");
             }
             else
             {
                 // Condition is not satisfied
-                _logger.LogInformation($"Condition '{condition.Conditions.First().PropertyName}' is not satisfied.");
+                _logger.LogInformation($"Condition '{condition.ExpressionToExecute}' is not satisfied.");
             }
         }
+        ruledPassed = conditionResult.Values.All(w => w == true);
+        if (ruledPassed)
+        {
+            ExecuteAction(data);
+        }
+
+
+        return new RuleExecutionResult(data, ruledPassed, conditionResult);
     }
 
-    public JSchema GetApplyToType() => _typeToApplyRule;
-    public string GetApplyToTypeName() => _applyToType;
+    public JSchema GetApplyToType() => _typeToApplyRule!;
+    public string GetApplyToTypeName() => _applyToType!;
 
 
 
     public static RuleBuilder CreateBuilder(ILogger logger) => new RuleBuilder(logger);
-    public class RuleBuilder
-    {
-        private readonly ILogger _logger;
-        private IRule _rule;
-        public RuleBuilder(ILogger logger)
-        {
-            _logger = logger;
-            _rule = new Rule(logger);
-        }
-
-        public RuleBuilder ForType(string type, JSchema jsonSchema)
-        {
-            _rule.SetType(type, jsonSchema);
-            _logger.LogInformation($"Type: {type}");
-            _logger.LogInformation(jsonSchema.ToString());
-            return this;
-        }
-
-        public RuleBuilder WithName(string name)
-        {
-            return this;
-        }
-     
-        public RuleBuilder AddCondition(RuleCondition ruleCondition)
-        {
-            _rule.AddCondition(ruleCondition);
-            return this;
-        }
-        public IRule Build() => _rule;
-    }
 }
+
+public record RuleExecutionResult(JObject Target, bool Succeed, Dictionary<string, bool> ConditionResults);
