@@ -144,17 +144,17 @@ namespace RuleEngineTester
 
            var cond1 = RuleEngine.WeaklyTyped.RuleCondition
                 .CreateBuilder(_logger)
-                .InitCondition("Age", ConditionType.Null, customer.GetType(), 18)
+                .InitCondition("Age", ConditionType.Null, 18)
                 .Build();
             var cond2 = RuleEngine.WeaklyTyped.RuleCondition
                 .CreateBuilder(_logger)
-                .InitCondition("Age", ConditionType.GreaterThan, customer.GetType(), 18)
+                .InitCondition("Age", ConditionType.GreaterThan,  18)
                 .Build();
             var cond = RuleEngine.WeaklyTyped.RuleCondition
                 .CreateBuilder(_logger)
-                .InitCondition("Email", ConditionType.NotNull, typeof(string), null)
-                .AndCondition("Email", ConditionType.NotEmpty, typeof(string), null)
-                .OrCondition("Email", ConditionType.NotEquals, typeof(string), "1")
+                .InitCondition("Email", ConditionType.NotNull, null)
+                .AndCondition("Email", ConditionType.NotEmpty, null)
+                .OrCondition("Email", ConditionType.NotEquals, "1")
                 .Build();
             // var data = File.ReadAllText("plain_rules.txt");
             // var ruleEngine = new RuleEngine.WeaklyTyped.Rules(_logger);

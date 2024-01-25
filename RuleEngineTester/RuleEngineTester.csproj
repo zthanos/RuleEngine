@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Antlr4.Runtime.Standard" Version="4.13.1" />
     <PackageReference Include="Cocona" Version="2.2.0" />
     <PackageReference Include="CoreCLR-NCalc" Version="3.0.119" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />

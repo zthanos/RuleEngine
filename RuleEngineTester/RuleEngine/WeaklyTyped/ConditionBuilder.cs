@@ -15,35 +15,35 @@ public class ConditionBuilder
         _condition = new(_logger);
     }
 
-    public ConditionBuilder InitCondition(string property, ConditionType condition, Type type, object? value)
+    public ConditionBuilder InitCondition(string property, ConditionType condition, object? value)
     {
         RuleConditionDefinition ruleConditionDefinition = new(
             property,
             condition,
-            type,
+          //  type,
             value,
             OperatorType.And);
         _condition.Add(ruleConditionDefinition);
         return this;
     }
-    public ConditionBuilder AndCondition(string property, ConditionType condition, Type type, object? value)
+    public ConditionBuilder AndCondition(string property, ConditionType condition, object? value)
     {
         RuleConditionDefinition ruleConditionDefinition = new(
            property,
            condition,
-           type,
+         //  type,
            value,
            OperatorType.And);
         _condition.Add(ruleConditionDefinition);
 
         return this;
     }
-    public ConditionBuilder OrCondition(string property, ConditionType condition, Type type, object? value)
+    public ConditionBuilder OrCondition(string property, ConditionType condition, object? value)
     {
         RuleConditionDefinition ruleConditionDefinition = new(
            property,
            condition,
-           type,
+        //   type,
            value,
            OperatorType.Or);
         _condition.Add(ruleConditionDefinition);

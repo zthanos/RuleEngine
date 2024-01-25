@@ -22,6 +22,14 @@ public class RuleBuilder
         return this;
     }
 
+    public RuleBuilder ForType(string type)
+    {
+        _rule.SetType(type, null);
+        _logger.LogDebug($"Type: {type}");
+        
+        return this;
+    }
+
     public RuleBuilder WithName(string name)
     {
         return this;

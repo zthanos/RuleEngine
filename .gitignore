@@ -146,3 +146,11 @@ _NCrunch*
 /RuleEngineTester/obj/project.assets.json
 /RuleEngineTester/obj/project.nuget.cache
 /RuleEngineTester/obj/RuleEngineTester.csproj.nuget.dgspec.json
+/.vs/ProjectEvaluation/ruleenginetester.metadata.v7.bin
+/.vs/ProjectEvaluation/ruleenginetester.projects.v7.bin
+/.vs/RuleEngineTester/v17/TestStore/0/003.testlog
+/.vs/RuleEngineTester/v17/TestStore/0/testlog.manifest
+/.vs/RuleEngineTester/v17/.futdcache.v2
+/RuleEngineTester/bin/Debug/net8.0/RuleEngineTester .deps.json
+/RuleEngineTester/obj/Debug/net8.0/RuleEngineTester.csproj.AssemblyReference.cache
+*.testlog

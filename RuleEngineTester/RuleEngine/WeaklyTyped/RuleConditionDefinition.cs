@@ -5,6 +5,6 @@ namespace RuleEngineTester.RuleEngine.WeaklyTyped;
 public record RuleConditionDefinition(
     string PropertyName,
     ConditionType ConditionType,
-    Type PropertyType,
+   // Type PropertyType,
     object? Value,
     OperatorType ConditionOperator);

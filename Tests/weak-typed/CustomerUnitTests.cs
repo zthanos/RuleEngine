@@ -33,17 +33,17 @@ public class CustomerUnitTests
 
         var cond1 = RuleCondition
              .CreateBuilder(logger)
-             .InitCondition("Age", ConditionType.Null, customer.GetType(), 18)
+             .InitCondition("Age", ConditionType.Null, 18)
              .Build();
         var cond2 = RuleCondition
             .CreateBuilder(logger)
-            .InitCondition("Age", ConditionType.GreaterThan, customer.GetType(), 18)
+            .InitCondition("Age", ConditionType.GreaterThan, 18)
             .Build();
         var cond = RuleCondition
             .CreateBuilder(logger)
-            .InitCondition("Email", ConditionType.NotNull, typeof(string), null)
-            .AndCondition("Email", ConditionType.NotEmpty, typeof(string), null)
-            .OrCondition("Email", ConditionType.NotEquals, typeof(string), "1")
+            .InitCondition("Email", ConditionType.NotNull, null)
+            .AndCondition("Email", ConditionType.NotEmpty, null)
+            .OrCondition("Email", ConditionType.NotEquals, "1")
             .Build();
         // var data = File.ReadAllText("plain_rules.txt");
         // var ruleEngine = new RuleEngine.WeaklyTyped.Rules(_logger);
@@ -103,17 +103,17 @@ public class CustomerUnitTests
 
         RuleCondition ispremium = RuleCondition
             .CreateBuilder(logger)
-            .InitCondition("CustomerSince", ConditionType.LessThanOrEquals, typeof(DateTime), yearsAsCustomer)
+            .InitCondition("CustomerSince", ConditionType.LessThanOrEquals, yearsAsCustomer)
             .Build();
 
         RuleCondition premiumDiscount = RuleCondition
             .CreateBuilder(logger)
-            .InitCondition("IsPremium", ConditionType.Equals, typeof(bool), true)
+            .InitCondition("IsPremium", ConditionType.Equals, true)
             .Build();
 
         RuleCondition amountDiscount = RuleCondition
             .CreateBuilder(logger)
-            .InitCondition("PurchaseAmount", ConditionType.GreaterThan, typeof(decimal), 150)
+            .InitCondition("PurchaseAmount", ConditionType.GreaterThan, 150)
             .Build();
 
         var amountRule = Rule.CreateBuilder(logger)
@@ -159,6 +159,9 @@ public class CustomerUnitTests
 public class Buyer
 {
     public string Name { get; set; }
+    public int Age { get; set; }
+    public string HomeAddress { get; set; }
+    public string Email { get; set; }
     public DateTime CustomerSince { get; set; }
     public decimal PurchaseAmount { get; set; }
     public decimal Discount { get; set; }
