@@ -28,7 +28,6 @@ namespace RuleEngineTester.RuleEngine.Parser.Antlr
 
         public override object VisitRuleFile(RulesParser.RuleFileContext context)
         {
-            _rules.Add(WeaklyTyped.Rule.CreateBuilder(_logger));
             // Your logic for when visiting the ruleFile
             return base.VisitRuleFile(context);
         }
@@ -36,6 +35,8 @@ namespace RuleEngineTester.RuleEngine.Parser.Antlr
 
         public override object VisitRuleName([NotNull] RulesParser.RuleNameContext context)
         {
+            _rules.Add(WeaklyTyped.Rule.CreateBuilder(_logger));
+
             _activeRuleBuilder.WithName(context.STRING().GetText());
             // Your logic here
             RuleName = context.STRING().GetText().Trim('\"');
@@ -55,7 +56,7 @@ namespace RuleEngineTester.RuleEngine.Parser.Antlr
         public object VisitBasicCondition([NotNull] RulesParser.BasicConditionContext context)
         {
             RuleCondition? cnd;
-            
+
             // Initialize a variable to hold the condition representation
             string condition = "";
 
@@ -64,11 +65,11 @@ namespace RuleEngineTester.RuleEngine.Parser.Antlr
                 // Handle the ID comparator value structure
                 string leftOperand = context.ID().GetText();
                 string comparator = context.comparator().GetText();
-                var rightOperand = Resolvers.ResolveOperandType(_schema, leftOperand,  context.value().GetText());
+                var rightOperand = Resolvers.ResolveOperandType(_schema, leftOperand, context.value().GetText());
 
                 condition = $"{leftOperand} {comparator} {rightOperand}";
                 _logger.LogInformation(condition);
-             
+
                 if (_active_conditionbuilder != null)
                 {
 
@@ -81,21 +82,28 @@ namespace RuleEngineTester.RuleEngine.Parser.Antlr
                 // Handle the ID unaryOperator structure
                 string leftOperand = context.ID().GetText();
                 string unaryOperator = context.unaryOperator().GetText();
-                var rightOperand = Resolvers.ResolveOperandType(_schema, leftOperand, context.value().GetText());
-
+                if (context.value != null)
+                {
+                    var rightOperand = Resolvers.ResolveOperandType(_schema, leftOperand, context.value()?.GetText());
+                    _active_conditionbuilder.AndCondition(leftOperand, ConditionOperatorResolver.ResolveType(unaryOperator), rightOperand);
+                }
+                else
+                {
+                    _active_conditionbuilder.AndCondition(leftOperand, ConditionOperatorResolver.ResolveType(unaryOperator));
+                }
                 condition = $"{leftOperand} {unaryOperator}";
 
-                _active_conditionbuilder.AndCondition(leftOperand, ConditionOperatorResolver.ResolveType(unaryOperator), rightOperand);
+                
                 _logger.LogInformation(condition);
 
             }
-            
+
             return base.VisitBasicCondition(context);
         }
 
         public override object VisitConditionBlock([NotNull] RulesParser.ConditionBlockContext context)
         {
-            
+
             var conditionBuilder = RuleCondition.CreateBuilder(_logger);
             foreach (var logicalExpression in context.logicalExpression())
             {
@@ -132,10 +140,10 @@ namespace RuleEngineTester.RuleEngine.Parser.Antlr
             var mathExpressionContext = context.mathExpression();
             string expressionAsString = context.mathExpression().GetText().Trim('\"');
             _activeRuleBuilder.AddAction(new RuleAction(variableName, expressionAsString));
-            _logger.LogInformation(variableName, mathExpressionContext);
+            _logger.LogInformation(variableName, expressionAsString);
 
             //// Process the math expression
-           // var expressionResult = VisitMathExpression(mathExpressionContext);
+            // var expressionResult = VisitMathExpression(mathExpressionContext);
 
             //// Assuming you have a method to handle action logic
             //HandleAction(variableName, expressionResult);
@@ -143,27 +151,27 @@ namespace RuleEngineTester.RuleEngine.Parser.Antlr
             return base.VisitAction(context);
         }
 
-        public override object VisitMathExpression(RulesParser.MathExpressionContext context)
-        {
-            try
-            {
-                // Example: Evaluate the math expression and get a result
-                double result = EvaluateMathExpression(context);
+        //public override object VisitMathExpression(RulesParser.MathExpressionContext context)
+        //{
+        //    try
+        //    {
+        //        // Example: Evaluate the math expression and get a result
+        //        double result = EvaluateMathExpression(context);
 
-                // Return a successful result
-                return MathExpressionResult.Success(result);
-            }
-            catch (Exception ex)
-            {
-                // Handle any exceptions and return a failure result
-                return MathExpressionResult.Failure(ex.Message);
-            }
-        }
+        //        // Return a successful result
+        //        return MathExpressionResult.Success(result);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Handle any exceptions and return a failure result
+        //        return MathExpressionResult.Failure(ex.Message);
+        //    }
+        //}
 
 
         private double EvaluateMathExpression(RulesParser.MathExpressionContext context)
         {
-            foreach(var term in context.term())
+            foreach (var term in context.term())
             {
                 var a = term.actionText();
                 var b = term.ID().GetText();
@@ -179,7 +187,7 @@ namespace RuleEngineTester.RuleEngine.Parser.Antlr
             //    case '+': break;
 
             //}
-            
+
             // Implement the logic to evaluate the math expression here
             // This might involve visiting child nodes and performing calculations
 

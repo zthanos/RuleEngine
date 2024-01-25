@@ -19,6 +19,13 @@ public class Rules
     {
         _rules = _rules.Append(rule);
     }
+    public void AddRange(IList<IRule> rules)
+    {
+        foreach (IRule rule in rules)
+        {
+            _rules = _rules.Append(rule);
+        }
+    }
 
     public IEnumerable<RuleExecutionResult> GetRuleExecutionResults() => _rulesExecutionResult;
     public bool RuleApplied => _rulesExecutionResult.All(w=>w.Succeed);

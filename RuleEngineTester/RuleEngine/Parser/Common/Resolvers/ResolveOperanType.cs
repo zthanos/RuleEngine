@@ -29,7 +29,7 @@ public static class Resolvers
 
                 case JSchemaType.String:
                     // If the schema indicates a date/datetime format, parse the string accordingly
-                    if (propertySchema.Format == "date" || propertySchema.Format == "datetime")
+                    if (propertySchema.Format == "date" || propertySchema.Format == "date-time")
                     {
                         // Parse as DateTime
                         if (DateTime.TryParse(rightOperandRaw, out DateTime dateTimeValue))

@@ -26,7 +26,7 @@ public class ConditionBuilder
         _condition.Add(ruleConditionDefinition);
         return this;
     }
-    public ConditionBuilder AndCondition(string property, ConditionType condition, object? value)
+    public ConditionBuilder AndCondition(string property, ConditionType condition, object? value = null)
     {
         RuleConditionDefinition ruleConditionDefinition = new(
            property,

@@ -154,3 +154,5 @@ _NCrunch*
 /RuleEngineTester/bin/Debug/net8.0/RuleEngineTester .deps.json
 /RuleEngineTester/obj/Debug/net8.0/RuleEngineTester.csproj.AssemblyReference.cache
 *.testlog
+/.vs/RuleEngineTester/v17/TestStore/OutputMessages/bbdc5d1e-8b60-222d-221e-ee0e5c07a701/StandardOutput.txt
+/.vs/RuleEngineTester/v17/TestStore/OutputMessages/b7b4e247-f9f1-f127-86a1-6588e45bea47/StandardOutput.txt

@@ -14,7 +14,7 @@ conditions: logicalExpression ;
 logicalExpression: expression (logicalOperator expression)* ;
 expression: basicCondition | '(' logicalExpression ')' ;
 basicCondition: ID comparator value | ID unaryOperator value?;
-value: ID | NUMBER | STRING ;
+value: DATE |ID | NUMBER | STRING ;
 
 unaryOperator: 'notEmpty' | 'Empty' | 'Equals' | 'GreaterThan' | 'LessThan' | 'isNull' | 'isNotNull';
 logicalOperator: 'and' | 'or' | '&' | '|' ;
@@ -26,6 +26,9 @@ term: ID | NUMBER | '(' mathExpression ')' | actionText ;
 actionText: ID | NUMBER ;
 
 // Lexer Rules
+DATE: [0-9][0-9][0-9][0-9] '-' [0-9][0-9] '-' [0-9][0-9] ; // Simple regex for a date in the format YYYY-MM-DD
+
+
 ID: [a-zA-Z_][a-zA-Z0-9_.]* ;
 NUMBER: '0' | '-'?[1-9][0-9]* ;
 STRING: '"' (~["\r\n])* '"' ;
