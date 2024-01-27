@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<PackageId>LsRuleEngine</PackageId>
+		<Version>1.0.0</Version>
+		<Authors>Thanos Zikas</Authors>
+		<Company>LeaderSoft</Company>
+		<Description>A rule engine library.</Description>
+		<RepositoryUrl>https://github.com/zthanos/RuleEngine/tree/main</RepositoryUrl>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Antlr4.Runtime.Standard" Version="4.13.1" />
+		<PackageReference Include="CoreCLR-NCalc" Version="3.0.119" />
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.15" />
+	</ItemGroup>
+</Project>
