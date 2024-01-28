@@ -1,5 +1,11 @@
-﻿public interface IRuleStorageService
+﻿using RuleEngineAPI.Services;
+
+namespace RuleEngineAPI.Infrastructure.Interfaces;
+
+public interface IRuleStorageService
 {
-    void StoreRule(string ruleContent, string jsonSchema);
-    // Other methods...
+    Task InitializeCosmosClientAsync();
+    Task<bool> StoreRule(int version, string typeToApplyRule, string ruleContent, string jsonSchema);
+    Task<IEnumerable<RuleItem>> GetRulesByTypeAsync(string id);
+
 }

@@ -3,10 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RuleEngineTester", "RuleEngineTester\RuleEngineTester.csproj", "{C0EBB0DC-C217-4A3F-980E-C3B07E46CA42}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{06AE2103-A2BF-4C93-AC08-E19F95774B4D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuleEngineAPI", "RuleEngineAPI\RuleEngineAPI.csproj", "{7B459A4B-9308-45C4-9E75-1F2258D48543}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LsRuleEngine", "LsRuleEngine\LsRuleEngine.csproj", "{D2A4F83C-07EF-4F83-91ED-53AFDC1957C6}"
@@ -17,14 +13,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C0EBB0DC-C217-4A3F-980E-C3B07E46CA42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C0EBB0DC-C217-4A3F-980E-C3B07E46CA42}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C0EBB0DC-C217-4A3F-980E-C3B07E46CA42}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C0EBB0DC-C217-4A3F-980E-C3B07E46CA42}.Release|Any CPU.Build.0 = Release|Any CPU
-		{06AE2103-A2BF-4C93-AC08-E19F95774B4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{06AE2103-A2BF-4C93-AC08-E19F95774B4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{06AE2103-A2BF-4C93-AC08-E19F95774B4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{06AE2103-A2BF-4C93-AC08-E19F95774B4D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7B459A4B-9308-45C4-9E75-1F2258D48543}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7B459A4B-9308-45C4-9E75-1F2258D48543}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B459A4B-9308-45C4-9E75-1F2258D48543}.Release|Any CPU.ActiveCfg = Release|Any CPU

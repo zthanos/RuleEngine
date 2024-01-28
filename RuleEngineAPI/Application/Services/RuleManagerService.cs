@@ -1,8 +1,10 @@
 ﻿using Antlr4.Runtime;
 using LsRuleEngine.Interfaces;
 using LsRuleEngine.Parser;
+using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using RuleEngineAPI.Application.Interfaces;
+using RuleEngineAPI.Services;
 
 
 
@@ -29,4 +31,29 @@ public class RuleManagerService(ILogger<RuleManagerService> logger) : IRuleManag
     }
 
     // Implementations for add and execute methods
+    public string  ExecuteRules(string jsonData, IEnumerable<RuleItem> rules)
+    {
+        if (string.IsNullOrEmpty(jsonData) || rules == null)
+        {
+            throw new ArgumentException("Invalid input data");
+        }
+
+        var rulesExecutor = new LsRuleEngine.Rules(_logger);
+        foreach (var rule in rules)
+        {
+            var schema = JSchema.Parse(rule.JsonSchema);
+            var rls = ParseRules(rule.RuleContent, schema);
+            rulesExecutor.AddRange(rls.ToList());
+        }
+        try
+        {
+            JObject? jobj = rulesExecutor.ExecuteRules(jsonData);
+            return jobj?.ToString() ?? string.Empty;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error while Executing rule:{ex}",ex.ToString());
+            throw;
+        }
+    }
 }

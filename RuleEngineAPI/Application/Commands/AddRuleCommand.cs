@@ -3,10 +3,11 @@ using MediatR;
 using Newtonsoft.Json.Schema;
 using OneOf;
 using RuleEngineAPI.Application.Interfaces;
+using RuleEngineAPI.Infrastructure.Interfaces;
 
 namespace RuleEngineAPI.Commands;
 
-public record AddRuleCommand(string RuleContent, string JsonSchema) : IRequest<OneOf<IEnumerable<IRule>, string>>;
+public record AddRuleCommand(string TypeToApplyRule, string RuleContent, string JsonSchema, int Version = 1) : IRequest<OneOf<IEnumerable<IRule>, string>>;
 
 public class AddRuleCommandHandler(IRuleManagerService ruleManagerService, IRuleStorageService storageService, ILogger<AddRuleCommandHandler> logger) : IRequestHandler<AddRuleCommand, OneOf<IEnumerable<IRule>, string>>
 {
@@ -14,21 +15,22 @@ public class AddRuleCommandHandler(IRuleManagerService ruleManagerService, IRule
     private readonly IRuleStorageService _storageService = storageService;
     private readonly ILogger<AddRuleCommandHandler> _logger = logger;
 
-    public Task<OneOf<IEnumerable<IRule>, string>> Handle(AddRuleCommand request, CancellationToken cancellationToken)
+    public async Task<OneOf<IEnumerable<IRule>, string>> Handle(AddRuleCommand request, CancellationToken cancellationToken)
     {
         try
         {
             var schema = JSchema.Parse(request.JsonSchema);
             var rules = _ruleManagerService.ParseRules(request.RuleContent, schema);
             // Store or process rules as needed
-            _storageService.StoreRule(request.RuleContent, request.JsonSchema);
+            await _storageService.StoreRule(request.Version, request.TypeToApplyRule, request.RuleContent, request.JsonSchema);
 
-            return Task.FromResult(OneOf<IEnumerable<IRule>, string>.FromT0(rules));
+   
+            return OneOf<IEnumerable<IRule>, string>.FromT0(rules);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error Creating rule");
-            return Task.FromResult(OneOf<IEnumerable<IRule>, string>.FromT1("Error message"));
+            return OneOf<IEnumerable<IRule>, string>.FromT1("Error message");
         }
     }
 
