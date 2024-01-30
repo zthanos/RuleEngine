@@ -1,84 +1,80 @@
 <script setup>
-import InsertSchemaModal from '../components/InsertSchemaModal.vue';
+import SchemaEditor from '../components/SchemaEditor.vue';
+import UpdateModel from '../components/UpdateModel.vue';
 </script>
+
 <template>
-  <div id="code-wrapper" class="flex w-full">
-    <div class="w-full space-y-2">
-      <h1 class="text-2xl font-semibold">Rule Testing</h1>
-      <!-- <div class="flex">
-        <textarea id="line-numbers" class="line-numbers rounded-bl-md" readonly>{{ lineNumbers }}</textarea>
-        <textarea 
-          id="gist-textarea" 
-          class="textarea w-full rounded-br-md" 
-          placeholder="Enter JSON schema here"
-          spellcheck="false" 
-          autocomplete="off" 
-          v-model="codeContent" 
-          @input="updateCode"
-          @scroll="syncScroll" 
-          @keydown="handleTab">
-        </textarea>
-        
-      </div> -->
-    </div>
+  <div class=" space-y-2">
+    <h1 class="text-3xl font-semibold ">Rule Testing</h1>
 
-  </div>
-  <!-- Modal toggle -->
-  <div class="flex justify-end mb-2">
-    <button data-modal-target="default-modal" data-modal-toggle="default-modal"
-      class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-      type="button">
-      Input JSchema
-    </button>
-  </div>
+    <ol
+      class="flex items-center w-full text-sm font-medium text-center text-gray-500 dark:text-gray-400 sm:text-base pl-64 pr-64">
+      <li
+        class="flex md:w-full items-center text-blue-600 dark:text-blue-500 sm:after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
+        <span
+          class="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
+          <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor" viewBox="0 0 20 20">
+            <path
+              d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+          </svg>
+          Import <span class="hidden sm:inline-flex sm:ms-2">Schema</span>
+        </span>
+      </li>
+      <li
+        class="flex cursor- md:w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
+        <span
+          class="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
+          <span class="me-2">2</span>
+          Upadate <span class="hidden sm:inline-flex sm:ms-2">Model</span>
+        </span>
+      </li>
+      <li class="flex items-center">
+        <span class="me-2">3</span>
+        Results
+      </li>
+    </ol>
 
-
-  <!-- Modal -->
-  <div id="default-modal" tabindex="-1" aria-hidden="true"
-    class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-    <div class="relative p-4 w-full max-w-2xl max-h-full">
-      <insert-schema-modal @close-modal="showModal = false" @submit-schema="(schema) => handleSubmittedSchema(schema)">
-      </insert-schema-modal>
-    </div>
-  </div>
-  <div class="flex w-full h-[600px] overflow-y-scroll" >
-    <textarea id="line-numbers" readonly class="syntax-numbers rounded-bl-md">{{ lineNumbers }}</textarea>
-    <div id="highlight" class="syntax-area w-full rounded-br-md h-full  ">
-      <pre class="text-xs"><code ref="codeBlock" class="json " @scroll="syncScroll" >{{ codeContent }}</code></pre>
-    </div>
-  </div>
-
-
-  <div>
-    <form v-if="Object.keys(formData).length" @submit.prevent="handleSubmit">
-      <div v-for="(value, key) in formData" :key="key">
-        <label :for="key">{{ key }}</label>
-        <input  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        :id="key" :value="value" :type="type" @input="handleInput(key, $event.target.value)">
-        <div>{{ this.formData[key].type  }}</div>
+    <div v-if="currentStep == 1">
+      <SchemaEditor @submit-schema="(schema) => this.codeContent = schema"></SchemaEditor>
+      <div class="flex  w-full justify-end pr-4">
+        <button type="submit" @click="nextStep()"
+          class=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+          Next Step: Update Model
+        </button>
       </div>
-      <button type="submit">Submit</button>
-    </form>
+    </div>
 
-    <!-- <div class="flex flex-col w-full">
-      <form @submit.prevent="handleSubmit">
-        <div v-for="property in jsonProperties" class="flex space-x-4">
-          <div class="mb-5">
-            <label :for="property.name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{
-              property.name
-            }} - {{ property.description }}</label>
-            <input :type="property.type" :id="property.name" v-model="property.value"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="">
-          </div>
-        </div>
-        <button type="submit">Submit</button>
-      </form>
+  </div>
 
-    </div> -->
+  <div v-if="currentStep == 2" class="">
+    <UpdateModel :schema="JSON.parse(this.codeContent)" @submit-json="(jsonData) => this.formData = jsonData">
+    </UpdateModel>
+    <div class="flex  w-full justify-end pr-4">
+      <button type="submit" @click="nextStep()"
+        class=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+        Next Step: Execute Rule
+      </button>
+    </div>
+  </div>
+
+  <div v-if="currentStep == 3" class="">
+    <div class="flex w-full justify-evenly space-x-8">
+      <h3  class="w-full text-3xl text-gray-400 pb-4 pt-8 ">Original Values </h3>
+      <h3  class="w-full text-3xl text-gray-400 pb-4 pt-8 ">Rule Applied Values </h3>
+      
+    </div>
+    <div class="flex w-full justify-evenly space-x-8">
+      <div id="highlight1" class="syntax-area w-full rounded-br-md h-full  ">
+        <pre class="text-xs"><code ref="originalJson" class="json "  >{{ formData }}</code></pre>
+      </div>
+      <div id="highlight2" class="syntax-area w-full rounded-br-md h-full  ">
+        <pre class="text-xs"><code ref="resultJson" class="json "  >{{ ruleResult }}</code></pre>
+      </div>
+    </div>
+
   </div>
 </template>
-  
 <script>
 
 import hljs from 'highlight.js';
@@ -86,150 +82,77 @@ import 'highlight.js/styles/default.css'; // or another style you prefer
 
 export default {
   components: {
-    InsertSchemaModal,
+    SchemaEditor,
   },
   data() {
     return {
+      currentStep: 1,
       codeContent: '',
       lineNumbers: '1.',
       schemaInput: '', // String representation of the JSON schema
       schema: {}, // Parsed JSON schema
       formData: {}, // Data object for user input
-      jsonProperties: []
+      jsonProperties: [],
+      ruleResult: {}
     };
   },
   watch: {
-    codeContent(newValue) {
-      try {
-        this.initializeFormData(newValue);
-        this.updateLineNumbers();
-        this.updateCode();
-      } catch (e) {
-        alert("Invalid JSON schema");
-      }
-    },
+
   },
   methods: {
-    handleSubmittedSchema(schema) {
-      this.codeContent = schema;
-      this.showModal = false;
-      this.updateLineNumbers();
-      this.updateCode();
-      // this.highlightCode();
-    },
-    initializeFormData(content) {
-      try {
-        this.schema = JSON.parse(content);
-        this.formData = {};
-       
-       
 
-        if (this.schema && typeof this.schema === 'object' && this.schema.properties) {
-          Object.keys(this.schema.properties).forEach(key => {
-            const prop = this.schema.properties[key];
-            // Set a default or placeholder value based on the type
-            if (prop.type === 'string') {
-              this.formData[key] = ''; // default for string
-            } else if (prop.type === 'number') {
-              this.formData[key] = 0; // default for number
-            } else if (prop.type === 'boolean') {
-              this.formData[key] = false; // default for boolean
-            } else if (prop.type === 'object') {
-              this.formData[key] = {}; // default for object
-            }   if (prop.type === 'string') {
-              this.formData[key] = ''; // default for string
-            }  else if (prop.type === 'integer') {
-              this.formData[key] = 0; // default for string
-              this.formData[key].type = 'number'
-            } else {
-              this.formData[key] = '';
-            }
-            // ... handle other types as needed
-          });
-        }
-        // for (const key in this.schema.properties) {
-        //   console.log(key)
-        // }
-
-        // for (const key in this.schema.properties) {
-        //   // console.log( this.schema.properties[key]);
-        //   // console.log( this.schema.properties[key].type);
-        //   this.jsonProperties.push({ name: key, type: this.schema.properties[key].type, value: '', description: this.schema.properties[key].description });
-        //   this.$set(this.formData, key, this.jsonProperties[key].default || '');
-
-          //this.formData.push('key');
-        // }
-        // console.log(this.jsonProperties);
-      } catch (e) {
-        alert("Invalid JSON schema");
+    nextStep() {
+      switch (this.currentStep) {
+        case 1:
+          // this.initializeFormData(this.codeContent);
+          this.currentStep++;
+          break;
+        case 2:
+          this.handleSubmit()
+          this.currentStep++;
+          break;
       }
     },
-    handleInput(key, value) {
-      this.formData[key] = value;
+    highlightResponse() {
+
+      this.$nextTick(() => {
+        const originalJson = this.$refs.originalJson;
+        if (originalJson) {
+          hljs.highlightElement(originalJson);
+        }
+        const resultJson = this.$refs.resultJson;
+        if (resultJson) {
+          hljs.highlightElement(resultJson);
+        }
+      });
+
     },
     async handleSubmit() {
-      console.log("Form Data:", this.formData);
-      const jsonData = JSON.stringify(this.formData);
-      const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          jsonData: jsonData,
-          typeToApplyRule: "Buyer-1" // Replace with actual type
-        })
-      };
       try {
-        const response = await fetch('https://localhost:44328/execute-rule', requestOptions);
+        const jsonData = JSON.stringify(this.formData); // Convert formData to JSON string
+        const payload = {
+          jsonData: jsonData,
+          typeToApplyRule: "Buyer-1" // Replace with the appropriate value or variable
+        };
+
+        const response = await fetch('https://localhost:44328/execute-rule', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload) // Convert the entire payload to JSON string
+        });
+
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        const data = await response.text(); // or response.json() if your server responds with JSON
-        console.log(data);
+
+        this.ruleResult = await response.json(); // or response.json() if your server responds with JSON
+        this.highlightResponse();
+        console.log(this.result);
       } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
       }
-    },
-    updateLineNumbers() {
-      const lines = this.codeContent.split("\n").length;
-      this.lineNumbers = Array.from({ length: lines }, (v, k) => k + 1).join('.\n') + '.';
-    },
-    syncScroll(event) {
-      const lineNumberText = this.$refs.lineNumbers;
-      lineNumberText.scrollTop = event.target.scrollTop;
-    },
-    handleTab(event) {
-      if (event.key === "Tab") {
-        event.preventDefault();
-        const start = event.target.selectionStart;
-        const end = event.target.selectionEnd;
-        this.codeContent = this.codeContent.substring(0, start) + "\t" + this.codeContent.substring(end);
-        this.$nextTick(() => {
-          event.target.selectionStart = event.target.selectionEnd = start + 1;
-        });
-      }
-    },
-    clearTextareas() {
-      this.codeContent = '';
-      this.lineNumbers = '1.';
-    },
-    trimCodeBlock(codeBlock) {
-      const lines = codeBlock.textContent.split("\n")
-      if (lines.length > 2) {
-        lines.shift();
-        lines.pop();
-      }
-      codeBlock.textContent = lines.join("\n")
-      return codeBlock
-    },
-    updateCode() {
-      this.$nextTick(() => {
-        const codeBlock = this.$refs.codeBlock;
-        if (codeBlock) {
-          hljs.highlightElement(codeBlock);
-        }
-      });
-      this.updateLineNumbers();
     }
+
   }
 };
 </script>

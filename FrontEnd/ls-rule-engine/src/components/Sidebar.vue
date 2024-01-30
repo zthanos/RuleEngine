@@ -10,7 +10,7 @@ import SidebarItem from '../components/SidebarItem.vue';
     <div class="h-[calc(100vh-50px)] bg-gray-800 py-[20px] ">
        <div class="flex flex-col justify-between px-[20px] h-full space-y-[10px]">
           <div class=" ">
-            <sidebar-item navigate="/Home" description="Dashboard"></sidebar-item>
+            <sidebar-item navigate="/home" description="Dashboard"></sidebar-item>
             <sidebar-item navigate="/dashboard" description="Rule Management"></sidebar-item>
             <sidebar-item navigate="/RuleTesting" description="Rule Testing"></sidebar-item>
             <sidebar-item navigate="/dashboard" description="Logs/Reports"></sidebar-item>

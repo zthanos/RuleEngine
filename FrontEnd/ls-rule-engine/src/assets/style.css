@@ -19,7 +19,7 @@
 }
 
 .textarea{
-    @apply bg-emDark-dark  text-white text-xs border border-white h-[300px] resize-none;
+    @apply bg-emDark-dark  text-white text-xs border border-white h-[600px] resize-none;
     border-top: none;
     border-left: none;
 }
@@ -29,7 +29,7 @@
 }
 
 .line-numbers{
-    @apply border border-white   text-xs text-emDark-light bg-emDark-dark h-[300px] w-[54px] text-right overflow-hidden resize-none;
+    @apply border border-white   text-xs text-emDark-light bg-emDark-dark h-[600px] w-[54px] text-right overflow-hidden resize-none;
     border-right: none;
     border-top: none;
 }
@@ -53,3 +53,5 @@
 .syntax-numbers:focus{
     @apply focus:outline-none focus:border-white focus:ring-0
 }
+
+
