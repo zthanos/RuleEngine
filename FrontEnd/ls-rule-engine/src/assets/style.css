@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.container {
+    @apply w-full min-w-min p-4;
+}
+
+
+.sidebar-menu-item {
+    @apply inline-flex relative items-center py-[10px] px-[10px] w-full text-sm font-medium rounded-md border-gray-200 hover:bg-gray-200 hover:text-gray-800
+}
+
+
+
+.textarea:focus{
+    @apply focus:outline-none focus:border-white focus:ring-0
+}
+
+.textarea{
+    @apply bg-emDark-dark  text-white text-xs border border-white h-[300px] resize-none;
+    border-top: none;
+    border-left: none;
+}
+
+.textarea:focus{
+    @apply focus:outline-none focus:border-white focus:ring-0
+}
+
+.line-numbers{
+    @apply border border-white   text-xs text-emDark-light bg-emDark-dark h-[300px] w-[54px] text-right overflow-hidden resize-none;
+    border-right: none;
+    border-top: none;
+}
+
+.line-numbers:focus{
+    @apply focus:outline-none focus:border-white focus:ring-0;
+}
+
+.syntax-area {
+    @apply bg-emSyntax border text-xs border-white h-auto;
+    border-top: none;
+    border-left: none;
+}
+
+.syntax-numbers{
+    @apply border border-white  py-[12px] text-xs text-emDark-light bg-emSyntax h-auto w-[54px] text-right overflow-hidden resize-none;
+    border-right: none;
+    border-top: none;
+}
+
+.syntax-numbers:focus{
+    @apply focus:outline-none focus:border-white focus:ring-0
+}
