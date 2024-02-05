@@ -46,6 +46,12 @@ import hljs from 'highlight.js';
 import 'highlight.js/styles/default.css'; // or another style you prefer
 
 export default {
+    props: {
+        schema: {
+            type: Object,
+            required: true
+        }
+    },
     data() {
         return {
             showCodeBlock: false,
@@ -53,7 +59,32 @@ export default {
             lineNumbers: '1.',
         };
     },
+    watch: {
+        codeContent(newValue) {
+            this.updateLineNumbers();
+            this.emitSchema()
+            //this.updateCode();
+        }, 
+        schema: {
+            handler(newVal, oldVal) {
+                console.log(oldVal);
+                console.log(newVal);
+                //this.initContent(oldVal);
+                this.initContent(newVal);
+            }
+        },
+        codeContent(newValue) {
+            this.updateLineNumbers();
+            this.emitSchema();
+        }
+    },
     methods: {
+        initContent(newSchema) {
+
+            if (newSchema && typeof newSchema === 'object') {
+                this.codeContent = JSON.stringify(newSchema, null, 2); // Format the schema as a string
+            }
+        },
         emitSchema() {
             this.$emit('submit-schema', this.codeContent);
         },
@@ -92,13 +123,7 @@ export default {
             this.lineNumbers = '1.';
         }
     },
-    watch: {
-        codeContent(newValue) {
-            this.updateLineNumbers();
-            this.emitSchema() 
-            //this.updateCode();
-        }
-    }
+
 };
 </script>
   

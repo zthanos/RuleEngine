@@ -1,4 +1,5 @@
 <script setup>
+import { Logger } from 'sass';
 import SchemaEditor from '../components/SchemaEditor.vue';
 import UpdateModel from '../components/UpdateModel.vue';
 </script>
@@ -6,7 +7,20 @@ import UpdateModel from '../components/UpdateModel.vue';
 <template>
   <div class=" space-y-2">
     <h1 class="text-3xl font-semibold ">Rule Testing</h1>
+    <form class="pb-8" action="#">
+      <label for="typeToApplyRule" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Type to Apply
+        Rule</label>
+      <div class="w-96  flex space-x-6">
 
+        <input type="text" name="typeToApplyRule" id="typeToApplyRule" v-bind="typeToApplyRule"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+          placeholder="name@company.com" required>
+        <button type="submit" @click="getRules()"
+          class=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm  text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+          Get Rules
+        </button>
+      </div>
+    </form>
     <ol
       class="flex items-center w-full text-sm font-medium text-center text-gray-500 dark:text-gray-400 sm:text-base pl-64 pr-64">
       <li
@@ -36,7 +50,7 @@ import UpdateModel from '../components/UpdateModel.vue';
     </ol>
 
     <div v-if="currentStep == 1">
-      <SchemaEditor @submit-schema="(schema) => this.codeContent = schema"></SchemaEditor>
+      <SchemaEditor :schema="newschema" @submit-schema="(schema) => this.codeContent = schema"></SchemaEditor>
       <div class="flex  w-full justify-end pr-4">
         <button type="submit" @click="nextStep()"
           class=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
@@ -48,9 +62,20 @@ import UpdateModel from '../components/UpdateModel.vue';
   </div>
 
   <div v-if="currentStep == 2" class="">
-    <UpdateModel :schema="JSON.parse(this.codeContent)" @submit-json="(jsonData) => this.formData = jsonData">
-    </UpdateModel>
-    <div class="flex  w-full justify-end pr-4">
+
+    <div class="flex">
+      <h5 class="text-xl font-medium text-gray-900 dark:text-white">Applicable Rules </h5>
+    </div>
+    <div class="flex space-x-6">
+      <UpdateModel :schema="JSON.parse(this.codeContent)" @submit-json="(jsonData) => this.formData = jsonData">
+      </UpdateModel>
+      <textarea class="w-[550px] border-0" >{{ ruleResult.ruleContent }}</textarea>
+    </div>
+    <div class="flex  w-full justify-end pr-4 space-x-2">
+      <button type="submit" @click="previousStep()"
+        class=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+        Previous Step: Import Schema
+      </button>
       <button type="submit" @click="nextStep()"
         class=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
         Next Step: Execute Rule
@@ -60,9 +85,9 @@ import UpdateModel from '../components/UpdateModel.vue';
 
   <div v-if="currentStep == 3" class="">
     <div class="flex w-full justify-evenly space-x-8">
-      <h3  class="w-full text-3xl text-gray-400 pb-4 pt-8 ">Original Values </h3>
-      <h3  class="w-full text-3xl text-gray-400 pb-4 pt-8 ">Rule Applied Values </h3>
-      
+      <h3 class="w-full text-3xl text-gray-400 pb-4 pt-8 ">Original Values </h3>
+      <h3 class="w-full text-3xl text-gray-400 pb-4 pt-8 ">Rule Applied Values </h3>
+
     </div>
     <div class="flex w-full justify-evenly space-x-8">
       <div id="highlight1" class="syntax-area w-full rounded-br-md h-full  ">
@@ -87,20 +112,36 @@ export default {
   data() {
     return {
       currentStep: 1,
-      codeContent: '',
-      lineNumbers: '1.',
       schemaInput: '', // String representation of the JSON schema
-      schema: {}, // Parsed JSON schema
-      formData: {}, // Data object for user input
-      jsonProperties: [],
-      ruleResult: {}
+      typeToApplyRule: '',
+      ruleResult: {},
+      loadedSchema: {},
+      newschema: {}
     };
   },
   watch: {
+    loadedSchema: {
+      immediate: true,
+      handler(newVal, oldVal) {
+        this.newschema = newVal
+        console.log(JSON.stringify(this.newschema))
 
+      }
+    },
   },
   methods: {
-
+    previousStep() {
+      switch (this.currentStep) {
+        case 2:
+          // this.initializeFormData(this.codeContent);
+          this.currentStep--;
+          break;
+        case 3:
+          this.handleSubmit()
+          this.currentStep--;
+          break;
+      }
+    },
     nextStep() {
       switch (this.currentStep) {
         case 1:
@@ -126,6 +167,18 @@ export default {
         }
       });
 
+    },
+    async getRules() {
+      const response = await fetch('https://localhost:44328/api/rules?type=Buyer' + this.typeToApplyRule + '-1', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      let resultsRaw = await response.json();
+      this.ruleResult = resultsRaw[0];
+      this.loadedSchema = JSON.parse(this.ruleResult.jsonSchema.replace(/^"|"$/g, ''));
     },
     async handleSubmit() {
       try {

@@ -1,10 +1,11 @@
 ﻿using Antlr4.Runtime;
+using LsRuleEngine;
 using LsRuleEngine.Interfaces;
 using LsRuleEngine.Parser;
-using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Schema;
-using RuleEngineAPI.Application.Interfaces;
-using RuleEngineAPI.Services;
+using RuleEngineAPI.Domain.Aggregates;
+using RuleEngineAPI.Domain.Interfaces;
 
 
 
@@ -31,29 +32,27 @@ public class RuleManagerService(ILogger<RuleManagerService> logger) : IRuleManag
     }
 
     // Implementations for add and execute methods
-    public string  ExecuteRules(string jsonData, IEnumerable<RuleItem> rules)
+    public RuleExecutionResults ExecuteRules(RuleSet ruleset, string jsonData)
     {
-        if (string.IsNullOrEmpty(jsonData) || rules == null)
-        {
-            throw new ArgumentException("Invalid input data");
-        }
+        //if (string.IsNullOrEmpty(jsonData) || Rulserules == null)
+        //{
+        //    throw new ArgumentException("Invalid input data");
+        //}
+        JSchema jSchema = JSchema.Parse(ruleset.Schema);
+        var rulesExecutor = new Rules(_logger);
+        var parsedRules = ParseRules(ruleset.Rules, jSchema);
+        rulesExecutor.AddRange(parsedRules.ToList());
+        string data = string.Copy(jsonData);
+        var appliedRuleData = rulesExecutor.ExecuteRules(data);
+        data = JsonConvert.SerializeObject(appliedRuleData);
 
-        var rulesExecutor = new LsRuleEngine.Rules(_logger);
-        foreach (var rule in rules)
-        {
-            var schema = JSchema.Parse(rule.JsonSchema);
-            var rls = ParseRules(rule.RuleContent, schema);
-            rulesExecutor.AddRange(rls.ToList());
-        }
-        try
-        {
-            JObject? jobj = rulesExecutor.ExecuteRules(jsonData);
-            return jobj?.ToString() ?? string.Empty;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError("Error while Executing rule:{ex}",ex.ToString());
-            throw;
-        }
+        var executionResults = rulesExecutor.GetRuleExecutionResults();
+        var conditionResults = executionResults.SelectMany(sm=> sm.ConditionResults).ToList();
+
+
+        return  new(jsonData, data, rulesExecutor.RuleApplied, conditionResults);
+        
     }
+
+
 }

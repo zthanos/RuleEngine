@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace LsRuleEngine;
 
@@ -66,7 +67,8 @@ public class LsRule(string ruleName, ILogger logger) : IRule
         };
         validatingReader.ValidationEventHandler += (sender, args) =>
         {
-            throw new RuleEngineException($"An error occurred while validating the JSON.\n{args.Message}");
+            _logger.LogDebug("An error occurred while validating the JSON.\n{args}", args.Message);
+          //  throw new RuleEngineException($"An error occurred while validating the JSON.\n{args.Message}");
         };
         // Deserialize using the validating reader
         JsonSerializer serializer = new();
@@ -78,11 +80,11 @@ public class LsRule(string ruleName, ILogger logger) : IRule
             throw new RuleEngineException("Invalid Object.");
         }
         bool ruledPassed = false;
-        Dictionary<string, bool> conditionResult = [];
+        var conditionResults = new List<ConditionResult>();
         foreach (RuleCondition condition in _conditions)
         {
             var res = condition.Evaluate(data);
-            conditionResult.Add(condition.ExpressionToExecute, res);
+            conditionResults.Add(new ConditionResult(condition.ExpressionToExecute, res));
             if (res)
             {
                 ruledPassed = true;
@@ -95,14 +97,14 @@ public class LsRule(string ruleName, ILogger logger) : IRule
                 _logger.LogInformation("Condition '{condition}' is not satisfied.", condition.ExpressionToExecute);
             }
         }
-        ruledPassed = conditionResult.Values.All(w => w == true);
+        ruledPassed = conditionResults.All(w => w.result == true);
         if (ruledPassed)
         {
             ExecuteAction(data);
         }
 
 
-        return new RuleExecutionResult(data, ruledPassed, conditionResult);
+        return new RuleExecutionResult(data, ruledPassed, conditionResults);
     }
 
     public JSchema GetApplyToType() => _typeToApplyRule!;
@@ -113,4 +115,5 @@ public class LsRule(string ruleName, ILogger logger) : IRule
     public static RuleBuilder CreateBuilder(string ruleName, ILogger logger) => new(ruleName, logger);
 }
 
-public record RuleExecutionResult(JObject Target, bool Succeed, Dictionary<string, bool> ConditionResults);
+public record RuleExecutionResult(JObject Target, bool Succeed, IEnumerable<ConditionResult> ConditionResults);
+public record ConditionResult(string condition, bool result);

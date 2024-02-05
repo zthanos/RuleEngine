@@ -7,10 +7,12 @@
     <InvariantGlobalization>true</InvariantGlobalization>
     <UserSecretsId>a8238fdf-37c9-4805-8471-d781be35645e</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="LsRuleEngine" Version="1.0.0" />
+    <PackageReference Include="EventStore.Client.Grpc" Version="23.1.0" />
+    <PackageReference Include="EventStore.Client.Grpc.Streams" Version="23.1.0" />
     <PackageReference Include="MediatR" Version="12.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.1" />
@@ -21,8 +23,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Application\Interfaces\" />
     <Folder Include="Core\Entities\" />
     <Folder Include="Core\ValueObjects\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LsRuleEngine\LsRuleEngine.csproj" />
   </ItemGroup>
 
 </Project>

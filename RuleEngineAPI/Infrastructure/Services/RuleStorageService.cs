@@ -16,8 +16,8 @@ public class RuleStorageService(CosmosClient cosmosClient, ILogger<RuleStorageSe
 
         try
         {
-            _database = await _cosmosClient.CreateDatabaseIfNotExistsAsync("lsruleengine");
-            _container = await _database.CreateContainerIfNotExistsAsync("rules", "/id");
+            //_database = await _cosmosClient.CreateDatabaseIfNotExistsAsync("lsruleengine");
+            //_container = await _database.CreateContainerIfNotExistsAsync("rules", "/id");
 
         }
         catch (Exception ex)
@@ -73,6 +73,7 @@ public class RuleStorageService(CosmosClient cosmosClient, ILogger<RuleStorageSe
         });
 
         var results = new List<RuleItem>();
+        if (iterator is null) return [];
         while (iterator.HasMoreResults)
         {
             var response = await iterator.ReadNextAsync();

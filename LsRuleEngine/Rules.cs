@@ -55,5 +55,6 @@ public class Rules(ILogger logger)
         // Apply search to retrieve the specific object based on applyToType
         return _rules.First(f => f.GetApplyToTypeName() == applyToType);
     }
+    public IEnumerable<IRule> RulesToApply => _rules;
 }
 

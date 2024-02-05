@@ -2,7 +2,7 @@
 using MediatR;
 using Newtonsoft.Json.Schema;
 using OneOf;
-using RuleEngineAPI.Application.Interfaces;
+using RuleEngineAPI.Domain.Interfaces;
 using RuleEngineAPI.Infrastructure.Interfaces;
 
 namespace RuleEngineAPI.Commands;
