@@ -51,7 +51,8 @@ services:
       context: .
       dockerfile: RuleEngineAPI/Dockerfile
     ports:
-      - 8001:80
+      - "5000:5000" # Map HTTP port
+      - "5001:5001" # Map HTTPS port, if needed
     depends_on: 
       - eventstoredb
       - azurecosmos
@@ -59,5 +60,6 @@ services:
       - ESDB=esdb://eventstoredb:2113?tls=false&tlsVerifyCert=false
       - ASPNETCORE_ENVIRONMENT=Development
       - COSMOS_ENDPOINT=https://azurecosmosemulator:8081/
+      - ASPNETCORE_URLS=http://+:5000;https://+:5001
     networks:
       - lsruleengineapi
