@@ -1,5 +1,6 @@
 <script setup>
 import SidebarItem from '../components/SidebarItem.vue';
+import RuleManagement from './RuleManagement.vue';
 </script>
 <template>
     <div class="h-[50px] bg-gray-900 flex justify-start items-center">
@@ -11,7 +12,7 @@ import SidebarItem from '../components/SidebarItem.vue';
        <div class="flex flex-col justify-between px-[20px] h-full space-y-[10px]">
           <div class=" ">
             <sidebar-item navigate="/home" description="Dashboard"></sidebar-item>
-            <sidebar-item navigate="/dashboard" description="Rule Management"></sidebar-item>
+            <sidebar-item navigate="/rule-management" description="Rule Management"></sidebar-item>
             <sidebar-item navigate="/RuleTesting" description="Rule Testing"></sidebar-item>
             <sidebar-item navigate="/dashboard" description="Logs/Reports"></sidebar-item>
           </div>

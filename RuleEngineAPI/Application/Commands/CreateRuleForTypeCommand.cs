@@ -1,6 +1,4 @@
-﻿using RuleEngineAPI.Domain.Aggregates;
-
-namespace RuleEngineAPI.Application.Commands;
+﻿namespace RuleEngineAPI.Application.Commands;
 
 public record CreateRuleForTypeCommand(
     Guid RuleSetId,

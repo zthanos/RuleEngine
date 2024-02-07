@@ -1,11 +1,8 @@
 ﻿using EventStore.Client;
-using RuleEngineAPI.Infrastructure.Interfaces;
-using System.Text.Json;
-using MediatR;
-using RuleEngineAPI.Application.Events;
-using System.Text;
 using Newtonsoft.Json;
-using System.Collections.Generic;
+using RuleEngineAPI.Application.Events;
+using RuleEngineAPI.Infrastructure.Interfaces;
+using System.Text;
 
 namespace RuleEngineAPI.Infrastructure.Services;
 
@@ -72,12 +69,12 @@ public class EventStoreService(EventStoreClient client) : IEventStore
             batch.Add(resolvedEvent);
             //if (batch.Count >= batchSize)
             //{
-                // Process the batch here (e.g., deserialization, transformation)
-                var processedEvent = DeserializeEvent(resolvedEvent);
-                if(processedEvent != null)
-                    results.Add(processedEvent);
-                events.AddRange(batch);
-                //batch.Clear(); // Prepare for next batch
+            // Process the batch here (e.g., deserialization, transformation)
+            var processedEvent = DeserializeEvent(resolvedEvent);
+            if (processedEvent != null)
+                results.Add(processedEvent);
+            events.AddRange(batch);
+            //batch.Clear(); // Prepare for next batch
             //}
         }
 

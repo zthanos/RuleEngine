@@ -5,7 +5,7 @@ namespace RuleEngineAPI.Infrastructure.Services;
 
 
 
-public class RuleSetRepository(IEventStore eventStore): IRuleSetRepository
+public class RuleSetRepository(IEventStore eventStore) : IRuleSetRepository
 {
     private readonly IEventStore _eventStore = eventStore;
 

@@ -1,7 +1,4 @@
-﻿using EventStore.Client;
-using MediatR;
-using RuleEngineAPI.Application.Events;
-using System.Security.Cryptography.Xml;
+﻿using RuleEngineAPI.Application.Events;
 using static EventStore.Client.StreamMessage;
 
 namespace RuleEngineAPI.Infrastructure.Interfaces;

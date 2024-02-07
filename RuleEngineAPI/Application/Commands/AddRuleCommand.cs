@@ -22,9 +22,9 @@ public class AddRuleCommandHandler(IRuleManagerService ruleManagerService, IRule
             var schema = JSchema.Parse(request.JsonSchema);
             var rules = _ruleManagerService.ParseRules(request.RuleContent, schema);
             // Store or process rules as needed
-            await _storageService.StoreRule(request.Version, request.TypeToApplyRule, request.RuleContent, request.JsonSchema);
+            await _storageService.StoreRule(request.Version, request.TypeToApplyRule, request.RuleContent, request.JsonSchema, []);
 
-   
+
             return OneOf<IEnumerable<IRule>, string>.FromT0(rules);
         }
         catch (Exception ex)

@@ -32,7 +32,7 @@ public class RuleManagerService(ILogger<RuleManagerService> logger) : IRuleManag
     }
 
     // Implementations for add and execute methods
-    public RuleExecutionResults ExecuteRules(RuleSet ruleset, string jsonData)
+    public RuleExecutionResults ExecuteRules(Guid id, RuleSet ruleset, string jsonData)
     {
         //if (string.IsNullOrEmpty(jsonData) || Rulserules == null)
         //{
@@ -47,11 +47,11 @@ public class RuleManagerService(ILogger<RuleManagerService> logger) : IRuleManag
         data = JsonConvert.SerializeObject(appliedRuleData);
 
         var executionResults = rulesExecutor.GetRuleExecutionResults();
-        var conditionResults = executionResults.SelectMany(sm=> sm.ConditionResults).ToList();
+        var conditionResults = executionResults.SelectMany(sm => sm.ConditionResults).ToList();
 
 
-        return  new(jsonData, data, rulesExecutor.RuleApplied, conditionResults);
-        
+        return new(id, jsonData, data, rulesExecutor.RuleApplied, conditionResults);
+
     }
 
 

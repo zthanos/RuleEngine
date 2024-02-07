@@ -1,11 +1,10 @@
 ﻿using LsRuleEngine;
-using RuleEngineAPI.Domain.Aggregates;
 
 namespace RuleEngineAPI.Application.Events;
 
-public class RuleExecuted(string jsonData, bool ruleApplied, string appliedRuleJsonData, IEnumerable<ConditionResult> conditionsResults) : IEvent
+public class RuleExecuted(Guid id, string jsonData, bool ruleApplied, string appliedRuleJsonData, IEnumerable<ConditionResult> conditionsResults) : IEvent
 {
-    private Guid _id = Guid.NewGuid();
+    private Guid _id = id;
     private DateTimeOffset _created = DateTimeOffset.Now;
 
     public string JsonData { get; } = jsonData;

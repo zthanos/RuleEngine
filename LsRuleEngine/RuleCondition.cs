@@ -10,8 +10,8 @@ namespace LsRuleEngine;
 public class RuleCondition(ILogger logger)
 {
     private readonly ILogger _logger = logger;
-    private  string _description = string.Empty;
-    public string ExpressionToExecute { get {  return _description; } }   
+    private string _description = string.Empty;
+    public string ExpressionToExecute { get { return _description; } }
     public string Description => _description;
 
     public List<RuleConditionDefinition> _conditions = [];
@@ -41,7 +41,7 @@ public class RuleCondition(ILogger logger)
                 c = ConditionEvaluator.CreateConditionEvaluator(target, definition);
             else if (definition.ConditionOperator == OperatorType.And)
             {
-                
+
                 c = Expression.AndAlso(c, ConditionEvaluator.CreateConditionEvaluator(target, definition));
             }
             else

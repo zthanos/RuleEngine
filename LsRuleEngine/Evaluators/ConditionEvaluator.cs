@@ -1,7 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
-using LsRuleEngine.Enums;
+﻿using LsRuleEngine.Enums;
 using LsRuleEngine.ErrorHandling;
+using Newtonsoft.Json.Linq;
 using System.Linq.Expressions;
 
 namespace LsRuleEngine.Evaluators;

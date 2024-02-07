@@ -24,7 +24,7 @@ public class Rules(ILogger logger)
     }
 
     public IEnumerable<RuleExecutionResult> GetRuleExecutionResults() => _rulesExecutionResult;
-    public bool RuleApplied => _rulesExecutionResult.All(w=>w.Succeed);
+    public bool RuleApplied => _rulesExecutionResult.All(w => w.Succeed);
 
     public JObject? ExecuteRules(string jsonData)
     {

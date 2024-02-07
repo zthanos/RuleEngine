@@ -1,7 +1,6 @@
 ﻿using Microsoft.Azure.Cosmos;
-using Microsoft.Extensions.Logging;
+using RuleEngineAPI.Domain.Aggregates;
 using RuleEngineAPI.Infrastructure.Interfaces;
-using System;
 
 namespace RuleEngineAPI.Services;
 public class RuleStorageService(CosmosClient cosmosClient, ILogger<RuleStorageService> logger) : IRuleStorageService
@@ -16,8 +15,8 @@ public class RuleStorageService(CosmosClient cosmosClient, ILogger<RuleStorageSe
 
         try
         {
-            //_database = await _cosmosClient.CreateDatabaseIfNotExistsAsync("lsruleengine");
-            //_container = await _database.CreateContainerIfNotExistsAsync("rules", "/id");
+            _database = await _cosmosClient.CreateDatabaseIfNotExistsAsync("lsruleengine");
+            _container = await _database.CreateContainerIfNotExistsAsync("rules", "/id");
 
         }
         catch (Exception ex)
@@ -28,7 +27,7 @@ public class RuleStorageService(CosmosClient cosmosClient, ILogger<RuleStorageSe
     }
 
     // Implement storage logic here
-    public async Task<bool> StoreRule(int version, string typeToApplyRule, string ruleContent, string jsonSchema)
+    public async Task<bool> StoreRule(int version, string typeToApplyRule, string ruleContent, string jsonSchema, IEnumerable<AvailableRule> availableRules)
     {
         _logger.LogInformation("Storing rule: {ruleContent}", ruleContent);
 
@@ -36,7 +35,7 @@ public class RuleStorageService(CosmosClient cosmosClient, ILogger<RuleStorageSe
         try
         {
             //var a = await _container.UpsertItemAsync(item, new PartitionKey(item.TypeToApplyRule));
-            var testItem = new { id = $"{typeToApplyRule}-{version}", typeToApplyRule, ruleContent, jsonSchema };
+            var testItem = new { id = $"{typeToApplyRule}", typeToApplyRule, ruleContent, jsonSchema, version, availableRules };
             if (_container is not null)
             {
                 await _container.UpsertItemAsync(testItem, new PartitionKey(testItem.id));
@@ -58,14 +57,14 @@ public class RuleStorageService(CosmosClient cosmosClient, ILogger<RuleStorageSe
             _logger.LogError("Unable to store rule {ex}", ex.StackTrace);
             return false;
         }
-        
+
     }
 
     // Add a method to retrieve rules by typeToApplyRule
     public async Task<IEnumerable<RuleItem>> GetRulesByTypeAsync(string id)
     {
-         var query = new QueryDefinition("SELECT * FROM c WHERE c.id = @id")
-            .WithParameter("@id", id);
+        var query = new QueryDefinition("SELECT * FROM c WHERE c.id = @id")
+           .WithParameter("@id", id);
 
         var iterator = _container?.GetItemQueryIterator<RuleItem>(query, requestOptions: new QueryRequestOptions
         {
@@ -83,6 +82,23 @@ public class RuleStorageService(CosmosClient cosmosClient, ILogger<RuleStorageSe
         return results;
     }
 
+    public async Task<IEnumerable<RuleItem>> GetAllRulesAsync()
+    {
+        var query = new QueryDefinition("SELECT * FROM c");
+
+        // Assuming _container is correctly instantiated and represents your Cosmos DB container
+        var iterator = _container.GetItemQueryIterator<RuleItem>(query);
+
+        var results = new List<RuleItem>();
+        while (iterator.HasMoreResults)
+        {
+            var response = await iterator.ReadNextAsync();
+            results.AddRange(response.Resource); // Use .Resource to access the actual items
+        }
+
+        return results;
+    }
+
 }
 public class RuleItem(string typeToApplyRule, string ruleContent, string jsonSchema, int version = 1)
 {
@@ -91,5 +107,6 @@ public class RuleItem(string typeToApplyRule, string ruleContent, string jsonSch
     public string TypeToApplyRule { get; set; } = typeToApplyRule;
     public string RuleContent { get; set; } = ruleContent;
     public string JsonSchema { get; set; } = jsonSchema;
+    public IEnumerable<AvailableRule> AvailableRules { get; set; }
 }
 

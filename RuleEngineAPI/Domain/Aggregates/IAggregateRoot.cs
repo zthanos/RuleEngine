@@ -1,6 +1,5 @@
 ﻿using EventStore.Client;
 using RuleEngineAPI.Application.Events;
-using static EventStore.Client.StreamMessage;
 
 namespace RuleEngineAPI.Domain.Aggregates;
 

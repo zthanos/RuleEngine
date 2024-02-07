@@ -1,9 +1,9 @@
 ﻿using Antlr4.Runtime.Misc;
 using LsRuleEngine.Builders;
 using LsRuleEngine.Interfaces;
-using Newtonsoft.Json.Schema;
 using LsRuleEngine.Resolvers;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Schema;
 
 namespace LsRuleEngine.Parser;
 

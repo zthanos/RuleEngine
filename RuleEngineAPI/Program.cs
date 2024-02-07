@@ -1,6 +1,7 @@
 using EventStore.Client;
 using MediatR;
 using Microsoft.Azure.Cosmos;
+using RuleEngineAPI;
 using RuleEngineAPI.Application.Commands;
 using RuleEngineAPI.Application.Queries;
 using RuleEngineAPI.Application.Services;
@@ -10,7 +11,6 @@ using RuleEngineAPI.Infrastructure.Interfaces;
 using RuleEngineAPI.Infrastructure.Services;
 using RuleEngineAPI.Services;
 using RuleEngineAPI.ViewModels;
-using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -92,41 +92,8 @@ app.UseCors(); // Enable CORS
 var ruleStorageService = app.Services.GetRequiredService<IRuleStorageService>();
 await ruleStorageService.InitializeCosmosClientAsync();
 
-
-// Map endpoints
-app.MapPost("/add-rule", async (AddRuleCommand command, IMediator mediator) =>
-{
-    var result = await mediator.Send(command);
-    return result.Match(
-        rules => Results.Ok(rules.Select(r => new RuleViewModel(r.Name, r.TypeToApplyRule, r.Conditions.Select(c => c.Description), r.Actions.Select(a => $"{a.PropertyName} = {a.Expression}")))), // Handle IEnumerable<IRule>
-        errorMsg => Results.BadRequest(errorMsg) // Handle error string
-    );
-})
-.WithOpenApi();
-
-app.MapPost("/execute-rule", async (ExecuteRuleCommand command, IRuleProcessingService processor) =>
-{
-    await processor.ProcessRuleExecution(command);
-}).WithOpenApi();
-
-
-app.MapGet("/api/rules", async (string type, IMediator mediator) =>
-{
-    var query = new GetRulesByTypeQuery(type);
-    var result = await mediator.Send(query);
-
-    return result.Match(
-        rules => Results.Ok(rules),
-        error => Results.Problem(error) // or Results.BadRequest(error) based on your error handling strategy
-    );
-});
-
-app.MapPost("/create-rule", async (CreateRuleForTypeCommand command, IRuleProcessingService processor) =>
-{
-    await processor.ProcessCreateRuleForType(command);
-
-});
-
+// Map grouped endpoints
+RuleEndpoints.MapRuleEndpoints(app);
 
 app.Run();
 

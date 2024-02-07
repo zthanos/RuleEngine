@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace LsRuleEngine;
 
@@ -19,7 +18,7 @@ public class LsRule(string ruleName, ILogger logger) : IRule
     private readonly List<RuleAction> _actions = [];
     public string Name => _ruleName;
     public IEnumerable<RuleCondition> Conditions => _conditions;
-    public IEnumerable<RuleAction> Actions=> _actions;
+    public IEnumerable<RuleAction> Actions => _actions;
     public string TypeToApplyRule => _applyToType ?? string.Empty;
 
 
@@ -60,7 +59,7 @@ public class LsRule(string ruleName, ILogger logger) : IRule
         JObject jObj = JObject.Parse(jsonData);
         //_logger.LogDebug($"Type : {_applyToType} \n Data: \n {jsonData}");
 
-        JsonTextReader reader = new (new StringReader(jsonData));
+        JsonTextReader reader = new(new StringReader(jsonData));
         JSchemaValidatingReader validatingReader = new(reader)
         {
             Schema = _typeToApplyRule
@@ -68,7 +67,7 @@ public class LsRule(string ruleName, ILogger logger) : IRule
         validatingReader.ValidationEventHandler += (sender, args) =>
         {
             _logger.LogDebug("An error occurred while validating the JSON.\n{args}", args.Message);
-          //  throw new RuleEngineException($"An error occurred while validating the JSON.\n{args.Message}");
+            //  throw new RuleEngineException($"An error occurred while validating the JSON.\n{args.Message}");
         };
         // Deserialize using the validating reader
         JsonSerializer serializer = new();
