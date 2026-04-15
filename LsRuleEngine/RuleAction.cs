@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
-using NCalc;
+﻿using NCalc;
+using Newtonsoft.Json.Linq;
 
 namespace LsRuleEngine;
 
@@ -50,6 +50,6 @@ public class RuleAction
             context[PropertyName] = JToken.FromObject(_value!);
         }
     }
-  
+
 }
 

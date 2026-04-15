@@ -1,0 +1,16 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "composeLaunchAction": "LaunchBrowser",
+      "composeLaunchServiceName": "ruleengineapi",
+      "composeLaunchUrl": "{Scheme}://localhost:{ServicePort}/swagger",
+      "serviceActions": {
+        "ruleengineapi": "StartDebugging",
+        "azurecosmos": "StartWithoutDebugging",
+        "eventstoredb": "StartWithoutDebugging"
+      }
+    }
+  }
+}

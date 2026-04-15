@@ -1,9 +1,10 @@
 ﻿using LsRuleEngine.Interfaces;
 using Newtonsoft.Json.Schema;
+using RuleEngineAPI.Domain.Aggregates;
 
-namespace RuleEngineAPI.Application.Interfaces;
+namespace RuleEngineAPI.Domain.Interfaces;
 public interface IRuleManagerService
 {
     IEnumerable<IRule> ParseRules(string ruleContent, JSchema schema);
-    // Additional methods for adding and executing rules can be defined here
+    RuleExecutionResults ExecuteRules(Guid id, RuleSet ruleset, string jsonData);
 }

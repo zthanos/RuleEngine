@@ -6,7 +6,7 @@ public static partial class Resolver
 {
 
 
-private static readonly Dictionary<string, ConditionType> ConditionTypeMappings = new()
+    private static readonly Dictionary<string, ConditionType> ConditionTypeMappings = new()
 {
         { ">=", ConditionType.GreaterThanOrEquals },
         { "GreaterThanOrEquals", ConditionType.GreaterThanOrEquals },
